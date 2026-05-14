@@ -1,0 +1,11 @@
+backend/venv/ 
+backend/ffmpeg.zip 
+backend/ffmpeg_dl.zip 
+backend/ffmpeg_extracted/ 
+backend/test.mov 
+*.pyc 
+__pycache__/ 
+build/ 
+.dart_tool/ 
+.flutter-plugins 
+.flutter-plugins-dependencies 
