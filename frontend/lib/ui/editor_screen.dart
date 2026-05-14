@@ -608,74 +608,59 @@ class _EditorScreenState extends State<EditorScreen> with TickerProviderStateMix
   Widget _buildMobileLayout() {
     return Column(
       children: [
-        // Safe area top
+        // Compact top bar: logo + actions + time
         Container(
           color: AppColors.bgPanel,
           child: SafeArea(
             bottom: false,
             child: Container(
-              height: 48,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              height: 40,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Row(
                 children: [
                   // Logo
                   Container(
-                    width: 28, height: 28,
+                    width: 24, height: 24,
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(colors: [AppColors.accent, AppColors.accentLight]),
-                      borderRadius: BorderRadius.circular(7),
+                      borderRadius: BorderRadius.circular(6),
                     ),
-                    child: const Center(child: Text('IV', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 10))),
+                    child: const Center(child: Text('IV', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 9))),
                   ),
-                  const SizedBox(width: 10),
-                  Text('IvCaptions', style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 14)),
+                  const SizedBox(width: 8),
+                  // Action buttons inline (no separate bar)
+                  if (_videoPath != null) ...[
+                    _mobileTopBtn(Icons.subtitles_outlined, 'Přepis', _runTranscription, isLoading: _isTranscribing),
+                    const SizedBox(width: 4),
+                    _mobileTopBtn(Icons.person_outline_rounded, 'Maska', _generateMask, isLoading: _isMasking),
+                    if (_maskPath != null) ...[
+                      const SizedBox(width: 4),
+                      _mobileTopBtn(Icons.layers_clear_outlined, 'Zrušit', () {
+                        setState(() { _maskPath = null; _maskPlayer.pause(); });
+                      }, color: AppColors.danger),
+                    ],
+                  ],
                   const Spacer(),
-                  // Time
+                  // Time display
                   Text(
-                    "${_currentTime.toStringAsFixed(1)}s",
-                    style: TextStyle(color: AppColors.textSecondary, fontSize: 12, fontFamily: 'monospace'),
+                    "${_currentTime.toStringAsFixed(1)}s / ${_videoDuration.toStringAsFixed(1)}s",
+                    style: TextStyle(color: AppColors.textMuted, fontSize: 11, fontFamily: 'monospace'),
                   ),
                 ],
               ),
             ),
           ),
         ),
-        // Video Preview
+        // Video Preview (tap to open file when no video, tap to play/pause with video)
         Expanded(
           child: Container(
             color: Colors.black,
             child: _buildVideoPreview(),
           ),
         ),
-        // Mobile Action Bar
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          decoration: BoxDecoration(
-            color: AppColors.bgPanel,
-            border: Border(top: BorderSide(color: AppColors.border.withOpacity(0.5))),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildMobileActionBtn(Icons.movie_outlined, 'Nahrát', _openVideoFile),
-              if (_videoPath != null) ...[
-                _isTranscribing
-                    ? SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.accent))
-                    : _buildMobileActionBtn(Icons.subtitles_outlined, 'Přepis', _runTranscription),
-                _isMasking
-                    ? SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.accent))
-                    : _buildMobileActionBtn(Icons.person_outline_rounded, 'Maska', _generateMask),
-                if (_maskPath != null)
-                  _buildMobileActionBtn(Icons.layers_clear_outlined, 'Zrušit', () {
-                    setState(() { _maskPath = null; _maskPlayer.pause(); });
-                  }, color: AppColors.danger),
-              ],
-            ],
-          ),
-        ),
-        // Timeline + Inspector (tabs)
+        // Timeline + Inspector tabs (takes ~50% of screen for easier editing)
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.35,
+          height: MediaQuery.of(context).size.height * 0.48,
           child: Container(
             decoration: BoxDecoration(
               color: AppColors.bgPanel,
@@ -685,17 +670,21 @@ class _EditorScreenState extends State<EditorScreen> with TickerProviderStateMix
               length: 2,
               child: Column(
                 children: [
-                  TabBar(
-                    indicatorColor: AppColors.accent,
-                    indicatorWeight: 2,
-                    labelColor: AppColors.accent,
-                    unselectedLabelColor: AppColors.textMuted,
-                    dividerColor: Colors.transparent,
-                    labelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-                    tabs: const [
-                      Tab(text: 'Timeline'),
-                      Tab(text: 'Inspektor'),
-                    ],
+                  Container(
+                    height: 36,
+                    child: TabBar(
+                      indicatorColor: AppColors.accent,
+                      indicatorWeight: 2,
+                      labelColor: AppColors.accent,
+                      unselectedLabelColor: AppColors.textMuted,
+                      dividerColor: Colors.transparent,
+                      labelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                      labelPadding: EdgeInsets.zero,
+                      tabs: const [
+                        Tab(text: 'Timeline', height: 34),
+                        Tab(text: 'Inspektor', height: 34),
+                      ],
+                    ),
                   ),
                   Expanded(
                     child: TabBarView(
@@ -714,24 +703,28 @@ class _EditorScreenState extends State<EditorScreen> with TickerProviderStateMix
     );
   }
 
-  Widget _buildMobileActionBtn(IconData icon, String label, VoidCallback onTap, {Color color = AppColors.accent}) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(10),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.08),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: color.withOpacity(0.2)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: color, size: 22),
-            const SizedBox(height: 3),
-            Text(label, style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.w600)),
-          ],
+  Widget _mobileTopBtn(IconData icon, String tooltip, VoidCallback onTap, {bool isLoading = false, Color color = AppColors.accent}) {
+    return Tooltip(
+      message: tooltip,
+      child: InkWell(
+        onTap: isLoading ? null : onTap,
+        borderRadius: BorderRadius.circular(8),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: isLoading
+              ? SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: color))
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(icon, color: color, size: 16),
+                    const SizedBox(width: 4),
+                    Text(tooltip, style: TextStyle(color: color, fontSize: 11, fontWeight: FontWeight.w600)),
+                  ],
+                ),
         ),
       ),
     );
@@ -748,7 +741,8 @@ class _EditorScreenState extends State<EditorScreen> with TickerProviderStateMix
     return Center(
       child: GestureDetector(
         onTap: () {
-          if (_videoPath != null) _togglePlay();
+          // Desktop: tap video to play/pause. Mobile: corner button handles it.
+          if (_videoPath != null && !isMobile) _togglePlay();
         },
         child: AspectRatio(
           aspectRatio: project!.resolution.width / project!.resolution.height,
@@ -816,20 +810,21 @@ class _EditorScreenState extends State<EditorScreen> with TickerProviderStateMix
                     onCaptionSelected: (id) { setState(() { _selectedCaptionId = id; }); },
                     onCaptionUpdate: () { setState(() {}); },
                   ),
-                  // Play button overlay (mobile)
-                  if (isMobile && _videoPath != null && !_isPlaying)
-                    Positioned.fill(
-                      child: Container(
-                        color: Colors.black26,
-                        child: Center(
-                          child: Container(
-                            width: 64, height: 64,
-                            decoration: BoxDecoration(
-                              color: AppColors.accent.withOpacity(0.9),
-                              shape: BoxShape.circle,
-                              boxShadow: [BoxShadow(color: AppColors.accent.withOpacity(0.3), blurRadius: 20)],
-                            ),
-                            child: const Icon(Icons.play_arrow_rounded, size: 36, color: Colors.black),
+                  // Small play/pause in corner (doesn't block caption drag)
+                  if (isMobile && _videoPath != null)
+                    Positioned(
+                      right: 8, bottom: 8,
+                      child: GestureDetector(
+                        onTap: _togglePlay,
+                        child: Container(
+                          width: 36, height: 36,
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.5),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            _isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                            size: 20, color: Colors.white.withOpacity(0.9),
                           ),
                         ),
                       ),
@@ -993,4 +988,7 @@ class _EditorScreenState extends State<EditorScreen> with TickerProviderStateMix
     super.dispose();
   }
 }
+
+
+
 
