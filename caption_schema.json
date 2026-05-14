@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "IvCaptions Project Schema",
+  "type": "object",
+  "properties": {
+    "project_id": { "type": "string" },
+    "language": { "type": "string" },
+    "resolution": {
+      "type": "object",
+      "properties": {
+        "width": { "type": "integer" },
+        "height": { "type": "integer" }
+      }
+    },
+    "captions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "text": { "type": "string" },
+          "start_time": { "type": "number" },
+          "end_time": { "type": "number" },
+          "category": { "type": "string", "enum": ["Main", "Secondary", "Accent"] },
+          "style": {
+            "type": "object",
+            "properties": {
+              "font_family": { "type": "string" },
+              "font_weight": { "type": "string" },
+              "font_size": { "type": "integer" },
+              "color": { "type": ["object", "string"] },
+              "stroke": { "type": "object" },
+              "shadow": { "type": "object" },
+              "glow": { "type": "object" },
+              "kerning": { "type": "number" }
+            }
+          },
+          "transform_3d": {
+            "type": "object",
+            "properties": {
+              "position": { "type": "object" },
+              "rotation": { "type": "object" },
+              "scale": { "type": "number" },
+              "mesh_bend": {
+                "type": "object",
+                "properties": {
+                  "enabled": { "type": "boolean" },
+                  "curve_type": { "type": "string" },
+                  "control_points": { "type": "array" }
+                }
+              }
+            }
+          },
+          "animation": { "type": "object" },
+          "sfx": { "type": "object" },
+          "layering": {
+            "type": "object",
+            "properties": {
+              "z_index": { "type": "string", "enum": ["front", "behind_subject"] }
+            }
+          }
+        },
+        "required": ["id", "text", "start_time", "end_time"]
+      }
+    }
+  },
+  "required": ["project_id", "language", "captions"]
+}

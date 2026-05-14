@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IvCaptions - Pro Mobile Editor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Roboto:wght@400;700;900&family=Outfit:wght@400;700;900&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #050505; --bg-panel: #0F0F0F; --border-color: #222222;
+            --accent-color: #D4AF37; --accent-hover: #FFD700;
+            --text-primary: #FFFFFF; --text-secondary: rgba(255, 255, 255, 0.4);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; touch-action: manipulation; }
+        body { background-color: var(--bg-deep); color: var(--text-primary); height: 100vh; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
+
+        header { background-color: var(--bg-panel); padding: 1rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1.1rem; }
+        .btn-export { background-color: var(--accent-color); color: black; border: none; padding: 10px 16px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: background-color 0.2s; font-size: 0.9rem; }
+        .btn-export:hover { background-color: var(--accent-hover); }
+
+        .app-body { flex: 1; display: flex; flex-direction: row; overflow: hidden; }
+        .workspace { flex: 1; display: flex; padding: 1rem; justify-content: center; align-items: center; position: relative; overflow: hidden;}
+        
+        .video-container {
+            width: 100%; max-width: 360px; aspect-ratio: 9/16; height: auto;
+            background-color: #000; border: 2px solid var(--border-color); border-radius: 12px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden; perspective: 800px;
+        }
+
+        .mock-video-bg {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(45deg, #111 25%, #1a1a1a 25%, #1a1a1a 50%, #111 50%, #111 75%, #1a1a1a 75%, #1a1a1a 100%); background-size: 40px 40px; display: flex; justify-content: center; align-items: center; color: var(--text-secondary); font-size: 1.2rem; font-weight: 700; text-align: center; opacity: 0.5;
+        }
+
+        #captionsContainer { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; transform-style: preserve-3d; }
+
+        .caption-wrapper { position: absolute; top: 50%; left: 50%; width: 100%; height: auto; pointer-events: none; opacity: 0; transition: opacity 0.1s; transform-style: preserve-3d; }
+        
+        .caption {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            text-align: center; font-weight: 900; pointer-events: auto; cursor: grab; user-select: none; -webkit-user-select: none; width: max-content; white-space: nowrap;
+        }
+        .caption-wrapper.selected .caption { outline: 2px dashed var(--accent-color); outline-offset: 10px; }
+        .caption:active { cursor: grabbing; }
+
+        .rotate-handle-x, .rotate-handle-y, .rotate-handle-z {
+            position: absolute; width: 26px; height: 26px; background-color: var(--accent-color); border-radius: 50%; pointer-events: auto; cursor: crosshair; display: none; box-shadow: 0 2px 10px rgba(0,0,0,0.8); z-index: 100; justify-content: center; align-items: center; color: black; font-weight: bold; font-size: 16px;
+        }
+        .rotate-handle-x { bottom: -45px; left: 50%; transform: translateX(-50%); }
+        .rotate-handle-x::after { content: '↕'; }
+        
+        .rotate-handle-y { top: -45px; left: 50%; transform: translateX(-50%); }
+        .rotate-handle-y::after { content: '↔'; }
+
+        .rotate-handle-z { right: -15px; top: 50%; transform: translateY(-50%); }
+        .rotate-handle-z::after { content: '↻'; }
+
+        .caption-wrapper.selected .rotate-handle-x { display: flex; }
+        .caption-wrapper.selected .rotate-handle-y { display: flex; }
+        .caption-wrapper.selected .rotate-handle-z { display: flex; }
+
+        /* INSPECTOR PANEL */
+        .inspector-panel { width: 340px; background-color: var(--bg-panel); border-left: 1px solid var(--border-color); padding: 1.5rem; overflow-y: auto; display: flex; flex-direction: column; }
+        .inspector-title { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 1rem; }
+        
+        /* Caption List */
+        .caption-list { flex-shrink: 0; max-height: 150px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 6px; margin-bottom: 1rem; background: var(--bg-deep); }
+        .caption-item { padding: 10px; border-bottom: 1px solid var(--border-color); cursor: pointer; color: var(--text-primary); font-size: 0.9rem; user-select: none; }
+        .caption-item:last-child { border-bottom: none; }
+        .caption-item:hover { background: #222; }
+        .caption-item.active { background: var(--accent-color); color: black; font-weight: bold; }
+
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 6px; }
+        .form-group input[type="text"], .form-group input[type="number"], .form-group select { width: 100%; background: var(--bg-deep); border: 1px solid var(--border-color); color: white; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 1rem; }
+        .form-group select { font-family: 'Inter', sans-serif; cursor: pointer; }
+        .form-group input[type="color"] { padding: 2px; height: 40px; cursor: pointer; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent-color); }
+        
+        .row-inputs { display: flex; gap: 10px; }
+        .row-inputs .form-group { flex: 1; margin-bottom: 0.5rem; }
+
+        .toggle-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 8px; background: var(--bg-deep); border-radius: 6px; border: 1px solid var(--border-color);}
+        .toggle-row label { margin-bottom: 0; font-size: 0.9rem; }
+        input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--accent-color); }
+
+        .sub-panel { background: rgba(255,255,255,0.03); border-radius: 6px; padding: 10px; margin-bottom: 10px; border: 1px solid var(--border-color); display: none;}
+        .sub-panel .form-group { margin-bottom: 0.5rem; }
+        .sub-panel .form-group:last-child { margin-bottom: 0; }
+        input[type=range].slider { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range].slider::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: var(--accent-color); cursor: pointer; margin-top: -6px; }
+        input[type=range].slider::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #444; border-radius: 2px; }
+
+        .empty-state { color: var(--text-secondary); text-align: center; margin-top: 20px; font-style: italic; padding: 10px;}
+
+        /* TIMELINE */
+        .timeline-panel { padding: 1rem; background-color: var(--bg-panel); border-top: 1px solid var(--border-color); display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+        .play-btn { background-color: var(--accent-color); color: black; border: none; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; cursor: pointer; flex-shrink: 0;}
+        .play-btn:active { transform: scale(0.95); }
+        .play-btn svg { width: 24px; height: 24px; fill: currentColor; margin-left: 4px; }
+        .play-btn.playing svg { margin-left: 0; }
+        .time-display { font-family: monospace; font-size: 1.2rem; font-weight: 700; min-width: 60px; }
+        
+        .slider-wrapper { position: relative; height: 90px; margin-bottom: 5px; flex: 1; }
+        .markers-container { position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: visible; pointer-events: none; z-index: 15; }
+        
+        .marker { position: absolute; height: 28px; background-color: var(--accent-color); border-radius: 4px; opacity: 0.8; pointer-events: auto; cursor: grab; }
+        .marker:active { cursor: grabbing; }
+        .marker.selected { border: 2px solid white; z-index: 5; }
+        
+        .timeline-handle { position: absolute; top: 0; bottom: 0; width: 14px; background: rgba(255,255,255,0.2); cursor: ew-resize; z-index: 10;}
+        .timeline-handle.left { left: 0; }
+        .timeline-handle.right { right: 0; }
+
+        .time-slider { -webkit-appearance: none; width: 100%; height: 90px; background: transparent; outline: none; position: absolute; top: 0; left: 0; z-index: 10; cursor: pointer; }
+        .time-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 2px; height: 90px; background: red; cursor: ew-resize; position: relative; z-index: 20; }
+        .time-slider::-webkit-slider-runnable-track { height: 90px; background: transparent; }
+
+        .safe-zone-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; opacity: 0; transition: opacity 0.2s ease; z-index: 50; }
+        .safe-zone-overlay.visible { opacity: 1; }
+        .safe-zone-box { position: absolute; top: 15%; bottom: 25%; left: 8%; right: 15%; border: 2px dashed rgba(255, 0, 85, 0.8); border-radius: 12px; box-shadow: inset 0 0 20px rgba(255,0,85,0.1); }
+        .safe-zone-label { position: absolute; top: -20px; left: 5px; color: rgba(255,0,85,0.8); font-size: 0.8rem; font-weight: bold; text-shadow: 0 0 4px #000; }
+        .guide-line-v { position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; border-left: 1px dashed rgba(0, 255, 255, 0.8); transition: border 0.1s; }
+        .guide-line-h { position: absolute; left: 0; right: 0; top: 50%; height: 1px; border-top: 1px dashed rgba(0, 255, 255, 0.8); transition: border 0.1s; }
+        .guide-line-v.snapped { border-left: 2px solid #FFD700; box-shadow: 0 0 10px #FFD700; }
+        .guide-line-h.snapped { border-top: 2px solid #FFD700; box-shadow: 0 0 10px #FFD700; }
+
+        @media (max-width: 768px) {
+            .app-body { flex-direction: column; }
+            .inspector-panel { width: 100%; max-height: 50vh; border-left: none; border-top: 1px solid var(--border-color); padding: 1rem; }
+            .timeline-panel { flex-wrap: nowrap; padding: 0.8rem 1rem; }
+            .workspace { padding: 0.5rem; }
+            .video-container { max-width: 100%; border-radius: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div><span style="color: var(--accent-color); margin-right: 8px;">✦</span> Pro Editor</div>
+        <button class="btn-export" onclick="exportJson()">Export JSON</button>
+    </header>
+
+    <div class="app-body">
+        <div class="workspace" id="workspace">
+            <div class="video-container" id="videoBox">
+                <div class="mock-video-bg">Video Preview</div>
+                <div class="safe-zone-overlay" id="safeZoneOverlay">
+                    <div class="safe-zone-box"><div class="safe-zone-label">IG / TikTok Safe Zone</div></div>
+                    <div class="guide-line-v" id="guideV"></div>
+                    <div class="guide-line-h" id="guideH"></div>
+                </div>
+                <div id="captionsContainer"></div>
+            </div>
+        </div>
+
+        <div class="inspector-panel" id="inspectorPanel">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; margin-top: 1rem;">
+                <div class="inspector-title" style="margin: 0;">Seznam Titulků</div>
+                <button class="btn-export" style="padding: 4px 8px; font-size: 0.8rem;" onclick="addNewCaption()">+ Nový</button>
+            </div>
+            <div class="caption-list" id="captionList"></div>
+
+            <div class="empty-state" id="emptyInspector">Vyber titulek ze seznamu nebo ve videu pro úpravu</div>
+            
+            <div id="inspectorContent" style="display: none;">
+                <div class="sub-panel" style="display: block; margin-bottom: 1.5rem; background: rgba(212,175,55,0.05); border-color: var(--accent-color);">
+                    <div class="inspector-title" style="margin-top:0; color: var(--accent-color);">Moje Šablony (Presety)</div>
+                    <div id="presetsContainer" style="display:flex; flex-wrap:wrap; gap: 8px; margin-bottom: 10px;"></div>
+                    <button class="btn-export" style="width:100%; background: transparent; color: var(--accent-color); border: 1px dashed var(--accent-color);" onclick="savePreset()">+ Uložit vzhled jako Preset</button>
+                </div>
+
+                <div class="inspector-title">Základní Vlastnosti</div>
+                <div class="form-group">
+                    <label>Text</label>
+                    <input type="text" id="propText" oninput="updateProp('text', this.value)">
+                </div>
+                
+                <div class="row-inputs" style="margin-bottom: 15px;">
+                    <div class="form-group">
+                        <label>Začátek (s)</label>
+                        <input type="number" id="propStart" step="0.01" min="0" onchange="updateProp('start_time', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label>Konec (s)</label>
+                        <input type="number" id="propEnd" step="0.01" min="0" onchange="updateProp('end_time', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label>Stopa (Řádek)</label>
+                        <select id="propTrack" onchange="updateProp('track', this.value)">
+                            <option value="0">1. Stopa</option>
+                            <option value="1">2. Stopa</option>
+                            <option value="2">3. Stopa</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="inspector-title">Animace (Při přehrávání)</div>
+                <div class="row-inputs">
+                    <div class="form-group">
+                        <label>IN (Zobrazit)</label>
+                        <select id="propAnimationIn" onchange="updateProp('animation_in', this.value)">
+                            <option value="none">Žádná (Tvrdý střih)</option>
+                            <option value="fade">Fade (Prolnutí)</option>
+                            <option value="pop">Pop (Zvětšení)</option>
+                            <option value="drop_in">Drop In (Shora)</option>
+                            <option value="slide_up">Slide Up (Zdola)</option>
+                            <option value="slide_down">Slide Down (Shora dolů)</option>
+                            <option value="slide_left">Slide Left (Zprava doleva)</option>
+                            <option value="slide_right">Slide Right (Zleva doprava)</option>
+                            <option value="whoosh">Whoosh (Rotace + Zoom)</option>
+                            <option value="zoom_in">Zoom In (Z dálky)</option>
+                            <option value="zoom_out">Zoom Out (Do blízka)</option>
+                            <option value="bounce">Bounce (Skok)</option>
+                            <option value="spin">Spin (Otočení 360°)</option>
+                            <option value="flip_x">Flip X (Salto vpřed)</option>
+                            <option value="flip_y">Flip Y (Otočka)</option>
+                            <option value="swing">Swing (Kyvadlo)</option>
+                            <option value="elastic">Elastic (Guma)</option>
+                            <option value="tilt_left">Tilt Left (Náklon vlevo)</option>
+                            <option value="tilt_right">Tilt Right (Náklon vpravo)</option>
+                            <option value="squish">Squish (Zploštění)</option>
+                            <option value="fall_back">Fall Back (Pád dozadu)</option>
+                        </select>
+                        <label style="display:flex; align-items:center; gap:4px; margin-top:6px; font-weight:normal; font-size:0.8rem; cursor:pointer;">
+                            <input type="checkbox" id="propSfxIn" onchange="updateProp('sfx_in', this.checked)"> SFX Zvuk
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>OUT (Zmizet)</label>
+                        <select id="propAnimationOut" onchange="updateProp('animation_out', this.value)">
+                            <option value="none">Žádná (Tvrdý střih)</option>
+                            <option value="fade">Fade (Prolnutí)</option>
+                            <option value="pop">Pop (Zmenšení)</option>
+                            <option value="drop_in">Drop Out (Nahoru)</option>
+                            <option value="slide_up">Slide Down (Dolů)</option>
+                            <option value="slide_down">Slide Up (Nahoru)</option>
+                            <option value="slide_left">Slide Right (Doprava)</option>
+                            <option value="slide_right">Slide Left (Doleva)</option>
+                            <option value="whoosh">Whoosh (Rotace + Zoom)</option>
+                            <option value="zoom_in">Zoom In (Do dálky)</option>
+                            <option value="zoom_out">Zoom Out (Zmenšit)</option>
+                            <option value="bounce">Bounce (Odskok)</option>
+                            <option value="spin">Spin (Otočení 360°)</option>
+                            <option value="flip_x">Flip X (Salto vzad)</option>
+                            <option value="flip_y">Flip Y (Otočka)</option>
+                            <option value="swing">Swing (Kyvadlo)</option>
+                            <option value="elastic">Elastic (Guma)</option>
+                            <option value="tilt_left">Tilt Left (Náklon vlevo)</option>
+                            <option value="tilt_right">Tilt Right (Náklon vpravo)</option>
+                            <option value="squish">Squish (Zploštění)</option>
+                            <option value="fall_back">Fall Back (Pád dozadu)</option>
+                        </select>
+                        <label style="display:flex; align-items:center; gap:4px; margin-top:6px; font-weight:normal; font-size:0.8rem; cursor:pointer;">
+                            <input type="checkbox" id="propSfxOut" onchange="updateProp('sfx_out', this.checked)"> SFX Zvuk
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="margin-top: 10px; margin-bottom: 20px;">
+                    <label>Hlasitost Zvuků (SFX) <span id="lblSfxVol">30%</span></label>
+                    <input type="range" class="slider" id="propSfxVolume" min="0" max="100" oninput="updateProp('sfx_volume', this.value)">
+                </div>
+
+                <div class="row-inputs">
+                    <div class="form-group">
+                        <label>Font</label>
+                        <select id="propFont" onchange="updateProp('font_family', this.value)">
+                            <!-- Bude naplněno dynamicky přes JS -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Velikost</label>
+                        <input type="number" id="propSize" oninput="updateProp('font_size', this.value)">
+                    </div>
+                </div>
+
+                <div class="inspector-title">Barvy a Přechody</div>
+                <div class="row-inputs" style="align-items: flex-end;">
+                    <div class="form-group" style="flex: 0.3; margin-bottom: 0;">
+                        <input type="color" id="propColorSolid" value="#FFFFFF" oninput="updateProp('color_solid', this.value)">
+                    </div>
+                    <div class="toggle-row" style="flex: 1; margin-bottom: 0;">
+                        <label>Použít Gradient</label>
+                        <input type="checkbox" id="propGradient" onchange="updateStyleToggle('gradient', this.checked)">
+                    </div>
+                </div>
+                
+                <div class="sub-panel" id="gradientSettings">
+                    <div class="row-inputs">
+                        <div class="form-group"><label>Barva 1</label><input type="color" id="propGrad1" oninput="updateProp('color_grad1', this.value)"></div>
+                        <div class="form-group"><label>Barva 2</label><input type="color" id="propGrad2" oninput="updateProp('color_grad2', this.value)"></div>
+                    </div>
+                </div>
+
+                <div class="inspector-title">Efekty</div>
+                <div class="toggle-row">
+                    <label>Stín (Shadow)</label>
+                    <input type="checkbox" id="propShadow" onchange="updateStyleToggle('shadow', this.checked)">
+                </div>
+                <div class="sub-panel" id="shadowSettings">
+                    <div class="form-group">
+                        <label>Rozmazání Stínu (Blur) <span id="lblShadowBlur"></span></label>
+                        <input type="range" class="slider" id="propShadowBlur" min="0" max="50" oninput="updateProp('shadow_blur', this.value)">
+                    </div>
+                </div>
+
+                <div class="toggle-row">
+                    <label>Zář (Glow)</label>
+                    <input type="checkbox" id="propGlow" onchange="updateStyleToggle('glow', this.checked)">
+                </div>
+                <div class="sub-panel" id="glowSettings">
+                    <div class="form-group">
+                        <label>Barva Záře</label>
+                        <input type="color" id="propGlowColor" oninput="updateProp('glow_color', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label>Síla Záře (Intensity) <span id="lblGlowBlur"></span></label>
+                        <input type="range" class="slider" id="propGlowBlur" min="0" max="50" oninput="updateProp('glow_blur', this.value)">
+                    </div>
+                </div>
+
+                <div class="inspector-title">Pozice a Rotace (Dostupné i myší)</div>
+                <div class="row-inputs">
+                    <div class="form-group"><label>X</label><input type="number" id="propX" oninput="updateProp('pos_x', this.value)"></div>
+                    <div class="form-group"><label>Y</label><input type="number" id="propY" oninput="updateProp('pos_y', this.value)"></div>
+                    <div class="form-group"><label>Z</label><input type="number" id="propZ" oninput="updateProp('pos_z', this.value)"></div>
+                </div>
+                <div class="row-inputs">
+                    <div class="form-group"><label>Rot X°</label><input type="number" id="propRotX" oninput="updateProp('rot_x', this.value)"></div>
+                    <div class="form-group"><label>Rot Y°</label><input type="number" id="propRotY" oninput="updateProp('rot_y', this.value)"></div>
+                    <div class="form-group"><label>Rot Z°</label><input type="number" id="propRotZ" oninput="updateProp('rot_z', this.value)"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="timeline-panel">
+        <div class="timeline-controls">
+            <button class="play-btn" id="playBtn" disabled>
+                <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <div class="time-display" id="timeDisplay">0.0s</div>
+        </div>
+        <div class="slider-wrapper" id="sliderWrapper">
+            <div class="markers-container" id="markersContainer"></div>
+            <input type="range" class="time-slider" id="timeSlider" min="0" max="1" step="0.01" value="0" disabled>
+        </div>
+    </div>
+
+    <script>
+        let projectData = null;
+        let isPlaying = false;
+        let currentTime = 0;
+        let maxTime = 0;
+        let animationFrame;
+        let lastTimestamp;
+        
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playBounce(vol) { // Bubbles/Pops
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.type = 'sine';
+            const now = audioCtx.currentTime;
+            osc.frequency.setValueAtTime(800, now);
+            osc.frequency.exponentialRampToValueAtTime(300, now + 0.15);
+            gain.gain.setValueAtTime(vol, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+            osc.start(now); osc.stop(now + 0.15);
+        }
+
+        function playImpact(vol) { // Heavy Thud
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.type = 'sine';
+            const now = audioCtx.currentTime;
+            osc.frequency.setValueAtTime(150, now);
+            osc.frequency.exponentialRampToValueAtTime(40, now + 0.3);
+            gain.gain.setValueAtTime(vol * 1.5, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+            osc.start(now); osc.stop(now + 0.3);
+        }
+
+        function createNoiseBuffer(duration) {
+            const bufferSize = audioCtx.sampleRate * duration;
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+            return buffer;
+        }
+
+        function playFastSwoosh(vol) { // Short Slide
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = createNoiseBuffer(0.3);
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'bandpass';
+            const gain = audioCtx.createGain();
+            noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
+            
+            const now = audioCtx.currentTime;
+            filter.frequency.setValueAtTime(1000, now);
+            filter.frequency.exponentialRampToValueAtTime(3000, now + 0.1);
+            filter.frequency.exponentialRampToValueAtTime(1000, now + 0.3);
+            gain.gain.setValueAtTime(0, now);
+            gain.gain.linearRampToValueAtTime(vol, now + 0.1);
+            gain.gain.linearRampToValueAtTime(0, now + 0.3);
+            noise.start(now); noise.stop(now + 0.3);
+        }
+
+        function playRiser(vol) { // Zoom In
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.type = 'triangle';
+            const now = audioCtx.currentTime;
+            osc.frequency.setValueAtTime(200, now);
+            osc.frequency.linearRampToValueAtTime(800, now + 0.4);
+            gain.gain.setValueAtTime(0, now);
+            gain.gain.linearRampToValueAtTime(vol, now + 0.3);
+            gain.gain.linearRampToValueAtTime(0, now + 0.4);
+            osc.start(now); osc.stop(now + 0.4);
+        }
+
+        function playFaller(vol) { // Zoom Out
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.type = 'triangle';
+            const now = audioCtx.currentTime;
+            osc.frequency.setValueAtTime(800, now);
+            osc.frequency.linearRampToValueAtTime(200, now + 0.4);
+            gain.gain.setValueAtTime(vol, now);
+            gain.gain.linearRampToValueAtTime(0, now + 0.4);
+            osc.start(now); osc.stop(now + 0.4);
+        }
+
+        function playSpin(vol) { // Double Whoosh
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = createNoiseBuffer(0.6);
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'bandpass';
+            const gain = audioCtx.createGain();
+            noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
+            
+            const now = audioCtx.currentTime;
+            filter.frequency.setValueAtTime(400, now);
+            filter.frequency.linearRampToValueAtTime(1500, now + 0.15);
+            filter.frequency.linearRampToValueAtTime(400, now + 0.3);
+            filter.frequency.linearRampToValueAtTime(1500, now + 0.45);
+            filter.frequency.linearRampToValueAtTime(400, now + 0.6);
+            
+            gain.gain.setValueAtTime(0, now);
+            gain.gain.linearRampToValueAtTime(vol, now + 0.15);
+            gain.gain.linearRampToValueAtTime(0.1, now + 0.3);
+            gain.gain.linearRampToValueAtTime(vol, now + 0.45);
+            gain.gain.linearRampToValueAtTime(0, now + 0.6);
+            noise.start(now); noise.stop(now + 0.6);
+        }
+
+        function playSwing(vol) { // Slow Whoosh
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = createNoiseBuffer(0.8);
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.Q.value = 5;
+            const gain = audioCtx.createGain();
+            noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
+            
+            const now = audioCtx.currentTime;
+            filter.frequency.setValueAtTime(200, now);
+            filter.frequency.exponentialRampToValueAtTime(1200, now + 0.4);
+            filter.frequency.exponentialRampToValueAtTime(200, now + 0.8);
+            
+            gain.gain.setValueAtTime(0, now);
+            gain.gain.linearRampToValueAtTime(vol, now + 0.4);
+            gain.gain.linearRampToValueAtTime(0, now + 0.8);
+            noise.start(now); noise.stop(now + 0.8);
+        }
+
+        function playSfx(type, volume = 30) {
+            const v = (volume / 100) * 0.5; // Ztišení na normální hodnotu
+            if (['pop', 'bounce', 'elastic', 'squish'].includes(type)) playBounce(v);
+            else if (['fall_back'].includes(type)) playImpact(v);
+            else if (['slide_left', 'slide_right', 'slide_up', 'slide_down', 'drop_in'].includes(type)) playFastSwoosh(v);
+            else if (['zoom_in'].includes(type)) playRiser(v);
+            else if (['zoom_out'].includes(type)) playFaller(v);
+            else if (['spin', 'flip_x', 'flip_y', 'whoosh'].includes(type)) playSpin(v);
+            else if (['swing', 'tilt_left', 'tilt_right'].includes(type)) playSwing(v);
+        }
+
+        let selectedCaptionId = null;
+
+        // Dynamické načítání Google Fontů s českou podporou
+        const SUPPORTED_FONTS = [
+            "Inter", "Roboto", "Montserrat", "Poppins", "Lato", "Oswald", "Raleway", "Ubuntu", "Open Sans", "Noto Sans",
+            "Work Sans", "Fira Sans", "Nunito", "Quicksand", "Rubik", "Mulish", "Titillium Web", "Kanit", "Barlow", "Exo 2",
+            "Anton", "Dosis", "Cabin", "Signika", "Maven Pro", "Comfortaa", "Merriweather", "Playfair Display", "Lora", "PT Serif",
+            "Roboto Slab", "EB Garamond", "Libre Baskerville", "Bitter", "Arvo", "Zilla Slab", "Space Mono", "Fira Code", "Roboto Mono", "Inconsolata",
+            "Caveat", "Permanent Marker", "Righteous", "Cinzel", "Alfa Slab One", "Varela Round", "Asap", "PT Sans", "Bebas Neue",
+            "Arial", "Impact", "Comic Sans MS", "Times New Roman", "Courier New"
+        ].sort();
+
+        const loadedFonts = new Set(["Inter"]);
+
+        function loadFontDynamic(fontName) {
+            if (!fontName) return;
+            if (["Arial", "Impact", "Comic Sans MS", "Times New Roman", "Courier New"].includes(fontName)) return;
+            if (loadedFonts.has(fontName)) return;
+            loadedFonts.add(fontName);
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(/ /g, '+')}:wght@400;700;900&display=swap&subset=latin-ext`;
+            document.head.appendChild(link);
+        }
+
+        function setupFontsUI() {
+            const fontSelect = document.getElementById('propFont');
+            fontSelect.innerHTML = '';
+            SUPPORTED_FONTS.forEach(font => {
+                const opt = document.createElement('option');
+                opt.value = font;
+                opt.textContent = font;
+                fontSelect.appendChild(opt);
+            });
+        }
+
+        // Dragging state
+        let isDraggingCaption = false;
+        let isRotatingCaption = false;
+        let rotatingAxis = null;
+        let dragStartX = 0;
+        let dragStartY = 0;
+        let initialValX = 0;
+        let initialValY = 0;
+        let initialValZ = 0;
+        
+        let isDraggingTimeline = false;
+        let draggingTimelineType = null;
+        let draggingMarkerId = null;
+        let dragOffsetTime = 0;
+
+        const playBtn = document.getElementById('playBtn');
+        const playIcon = document.getElementById('playIcon');
+        const pauseIcon = document.getElementById('pauseIcon');
+        const timeDisplay = document.getElementById('timeDisplay');
+        const timeSlider = document.getElementById('timeSlider');
+        const sliderWrapper = document.getElementById('sliderWrapper');
+        
+        const captionsContainer = document.getElementById('captionsContainer');
+        const markersContainer = document.getElementById('markersContainer');
+        const captionList = document.getElementById('captionList');
+        const videoBox = document.getElementById('videoBox');
+        
+        const emptyInspector = document.getElementById('emptyInspector');
+        const inspectorContent = document.getElementById('inspectorContent');
+
+        function parseColor(colorObj) {
+            if (typeof colorObj === 'string') return colorObj;
+            if (colorObj && colorObj.type === 'gradient' && colorObj.colors && colorObj.colors.length >= 2) {
+                return `-webkit-linear-gradient(top, ${colorObj.colors[0]}, ${colorObj.colors[1]})`;
+            }
+            return '#FFFFFF';
+        }
+
+        async function init() {
+            try {
+                document.body.addEventListener('touchmove', function(e) { 
+                    if(e.target.closest('.inspector-panel') === null && e.target.closest('.timeline-panel') === null) { e.preventDefault(); }
+                }, { passive: false });
+
+                const response = await fetch('output_captions.json');
+                if (!response.ok) throw new Error("HTTP " + response.status);
+                projectData = await response.json();
+                
+                projectData.captions.forEach(c => {
+                    if(c.style && c.style.font_family) loadFontDynamic(c.style.font_family);
+                });
+                
+                setupFontsUI();
+                loadPresetsUI();
+                calcMaxTime();
+                renderCaptionList();
+                setupTimeline();
+                renderCaptions();
+                
+                playBtn.disabled = false;
+                timeSlider.disabled = false;
+                window.addEventListener('resize', renderCaptions);
+            } catch (err) {
+                console.error("Initialization error:", err);
+            }
+        }
+
+        function calcMaxTime() {
+            maxTime = 0;
+            if(projectData && projectData.captions) {
+                projectData.captions.forEach(c => { if (c.end_time > maxTime) maxTime = c.end_time; });
+            }
+            maxTime = Math.ceil(maxTime + 1); 
+            timeSlider.max = maxTime;
+        }
+
+        function renderCaptionList() {
+            captionList.innerHTML = '';
+            if(!projectData) return;
+            projectData.captions.forEach(c => {
+                const item = document.createElement('div');
+                item.className = 'caption-item' + (c.id === selectedCaptionId ? ' active' : '');
+                item.textContent = `[${c.start_time.toFixed(1)}s] ${c.text}`;
+                item.onclick = () => {
+                    selectCaption(c.id);
+                    currentTime = c.start_time;
+                    updateUI();
+                };
+                captionList.appendChild(item);
+            });
+        }
+
+        function setupTimeline() {
+            if(!projectData) return;
+            markersContainer.innerHTML = '';
+            
+            // Nakreslit čáry pro rozdělení 3 stop
+            for(let i=1; i<3; i++) {
+                const divider = document.createElement('div');
+                divider.className = 'track-divider';
+                divider.style.position = 'absolute';
+                divider.style.left = '0'; divider.style.right = '0';
+                divider.style.top = (i * 30) + 'px';
+                divider.style.height = '1px';
+                divider.style.backgroundColor = 'rgba(255,255,255,0.1)';
+                divider.style.pointerEvents = 'none';
+                markersContainer.appendChild(divider);
+            }
+
+            projectData.captions.forEach(c => {
+                const leftPercent = (c.start_time / maxTime) * 100;
+                const widthPercent = ((c.end_time - c.start_time) / maxTime) * 100;
+                const track = c.track || 0;
+
+                const marker = document.createElement('div');
+                marker.className = 'marker';
+                if(c.id === selectedCaptionId) marker.classList.add('selected');
+                marker.id = 'marker_' + c.id;
+                marker.style.left = leftPercent + '%';
+                marker.style.width = widthPercent + '%';
+                marker.style.top = (track * 30) + 'px';
+                marker.style.height = '28px';
+
+                const leftHandle = document.createElement('div');
+                leftHandle.className = 'timeline-handle left';
+                const rightHandle = document.createElement('div');
+                rightHandle.className = 'timeline-handle right';
+
+                function handleTimelineStart(e, type) {
+                    isDraggingTimeline = true;
+                    draggingTimelineType = type;
+                    draggingMarkerId = c.id;
+                    if (type === 'body') {
+                        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                        const rect = sliderWrapper.getBoundingClientRect();
+                        let percent = (clientX - rect.left) / rect.width;
+                        dragOffsetTime = (percent * maxTime) - c.start_time;
+                    }
+                    if(isPlaying) playBtn.click();
+                }
+
+                leftHandle.addEventListener('mousedown', (e) => { e.stopPropagation(); handleTimelineStart(e, 'left'); });
+                leftHandle.addEventListener('touchstart', (e) => { e.stopPropagation(); handleTimelineStart(e, 'left'); }, {passive: false});
+                
+                rightHandle.addEventListener('mousedown', (e) => { e.stopPropagation(); handleTimelineStart(e, 'right'); });
+                rightHandle.addEventListener('touchstart', (e) => { e.stopPropagation(); handleTimelineStart(e, 'right'); }, {passive: false});
+
+                marker.addEventListener('mousedown', (e) => { e.stopPropagation(); handleTimelineStart(e, 'body'); });
+                marker.addEventListener('touchstart', (e) => { e.stopPropagation(); handleTimelineStart(e, 'body'); }, {passive: false});
+
+                marker.appendChild(leftHandle);
+                marker.appendChild(rightHandle);
+                markersContainer.appendChild(marker);
+            });
+        }
+        
+        function updateSingleMarkerUI(caption) {
+            const marker = document.getElementById('marker_' + caption.id);
+            if(marker) {
+                const startPercent = (caption.start_time / maxTime) * 100;
+                const widthPercent = ((caption.end_time - caption.start_time) / maxTime) * 100;
+                marker.style.left = startPercent + '%';
+                marker.style.width = widthPercent + '%';
+            }
+        }
+
+        function updateSingleCaptionTransform(caption) {
+            const wrapper = document.getElementById(caption.id);
+            if(!wrapper) return;
+            const bWidth = videoBox.clientWidth;
+            const bHeight = videoBox.clientHeight;
+            const scaleX = bWidth / projectData.resolution.width;
+            const scaleY = bHeight / projectData.resolution.height;
+            const scale = Math.min(scaleX, scaleY);
+
+            const t = caption.transform_3d || {};
+            const pos = t.position || {};
+            const rot = t.rotation || {};
+
+            const tx = ((pos.x || 0) * scale) - (bWidth / 2);
+            const ty = ((pos.y || 0) * scale) - (bHeight / 2);
+            const tz = pos.z || 0;
+            const rx = rot.x || 0;
+            const ry = rot.y || 0;
+            const rz = rot.z || 0;
+
+            let animTx = 0, animTy = 0, animTz = 0, animScaleX = 1, animScaleY = 1, animRotX = 0, animRotY = 0, animRotZ = 0;
+            const animIn = caption.animation_in || 'none';
+            const animOut = caption.animation_out || 'none';
+            
+            if(caption.id !== selectedCaptionId) {
+                const inTime = Math.max(0, currentTime - caption.start_time);
+                const outTime = Math.max(0, caption.end_time - currentTime);
+                const duration = 0.3; // Plynulejší a delší animace (300ms)
+                
+                let progress = 1;
+                let activeAnim = 'none';
+
+                if (inTime < duration && animIn !== 'none') {
+                    progress = inTime / duration; 
+                    activeAnim = animIn;
+                } else if (outTime < duration && animOut !== 'none') {
+                    progress = outTime / duration; 
+                    activeAnim = animOut;
+                }
+                
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const elastic = progress === 1 ? 1 : progress === 0 ? 0 : Math.pow(2, -10 * progress) * Math.sin((progress * 10 - 0.75) * ((2 * Math.PI) / 3)) + 1;
+                
+                if (progress < 1) {
+                    const inv = 1 - easeOut;
+                    const elasticInv = 1 - elastic;
+
+                    switch(activeAnim) {
+                        case 'fade': break; // Fade is handled via opacity
+                        case 'pop': animScaleX = animScaleY = 0.5 + (0.5 * easeOut); break;
+                        case 'drop_in': animTy = -150 * inv; break;
+                        case 'slide_up': animTy = 150 * inv; break;
+                        case 'slide_down': animTy = -150 * inv; break;
+                        case 'slide_left': animTx = 150 * inv; break;
+                        case 'slide_right': animTx = -150 * inv; break;
+                        case 'whoosh': animScaleX = animScaleY = 1.5 - (0.5 * easeOut); animRotZ = -20 * inv; break;
+                        case 'zoom_in': animScaleX = animScaleY = 0.1 + (0.9 * easeOut); break;
+                        case 'zoom_out': animScaleX = animScaleY = 3.0 - (2.0 * easeOut); break;
+                        case 'bounce': animTy = -150 * elasticInv; break;
+                        case 'spin': animRotZ = 360 * inv; break;
+                        case 'flip_x': animRotX = 90 * inv; break;
+                        case 'flip_y': animRotY = 90 * inv; break;
+                        case 'swing': animRotZ = 45 * elasticInv; break;
+                        case 'elastic': animScaleX = animScaleY = Math.max(0, elastic); break;
+                        case 'tilt_left': animRotZ = 45 * inv; break;
+                        case 'tilt_right': animRotZ = -45 * inv; break;
+                        case 'squish': animScaleX = 1 + (1.0 * inv); animScaleY = Math.max(0, 1 - (0.8 * inv)); break;
+                        case 'fall_back': animRotX = -90 * inv; animTz = -300 * inv; break;
+                    }
+                }
+            }
+
+            wrapper.style.transform = `translate(-50%, -50%) translate3d(${tx + animTx}px, ${ty + animTy}px, ${tz + animTz}px) rotateX(${rx + animRotX}deg) rotateY(${ry + animRotY}deg) rotateZ(${rz + animRotZ}deg) scale(${animScaleX}, ${animScaleY})`;
+        }
+
+        function renderCaptions() {
+            captionsContainer.innerHTML = '';
+            if(!projectData) return;
+            const bWidth = videoBox.clientWidth;
+            const bHeight = videoBox.clientHeight;
+            const scaleX = bWidth / projectData.resolution.width;
+            const scaleY = bHeight / projectData.resolution.height;
+            const scale = Math.min(scaleX, scaleY);
+
+            projectData.captions.forEach(c => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'caption-wrapper' + (selectedCaptionId === c.id ? ' selected' : '');
+                wrapper.id = c.id;
+
+                const textEl = document.createElement('div');
+                textEl.className = 'caption';
+                textEl.textContent = c.text;
+                
+                const styleObj = c.style || {};
+                textEl.style.fontFamily = styleObj.font_family || 'Inter';
+                textEl.style.fontWeight = styleObj.font_weight || '900';
+                textEl.style.fontSize = ((styleObj.font_size || 100) * scale) + 'px';
+                
+                if (typeof styleObj.color === 'object') {
+                    textEl.style.background = parseColor(styleObj.color);
+                    textEl.style.webkitBackgroundClip = 'text';
+                    textEl.style.webkitTextFillColor = 'transparent';
+                } else {
+                    textEl.style.color = styleObj.color || '#FFFFFF';
+                }
+
+                let filterStr = '';
+                if (styleObj.shadow) filterStr += `drop-shadow(${styleObj.shadow.offset_x || 0}px ${styleObj.shadow.offset_y || 0}px ${styleObj.shadow.blur || 10}px ${styleObj.shadow.color || 'rgba(0,0,0,1)'}) `;
+                if (styleObj.glow) filterStr += `drop-shadow(0px 0px ${styleObj.glow.blur || 20}px ${styleObj.glow.color || '#FF0000'})`;
+                textEl.style.filter = filterStr;
+
+                // Position Drag
+                function handleDragStart(e) {
+                    selectCaption(c.id);
+                    isDraggingCaption = true;
+                    dragStartX = e.touches ? e.touches[0].clientX : e.clientX;
+                    dragStartY = e.touches ? e.touches[0].clientY : e.clientY;
+                    
+                    const t = c.transform_3d || {};
+                    const pos = t.position || {};
+                    initialValX = pos.x || 0;
+                    initialValY = pos.y || 0; 
+                    if(isPlaying) playBtn.click();
+                    
+                    document.getElementById('safeZoneOverlay').classList.add('visible');
+                }
+                textEl.addEventListener('mousedown', handleDragStart);
+                textEl.addEventListener('touchstart', (e) => { e.stopPropagation(); handleDragStart(e); }, {passive: false});
+
+                // Rotate X Handle (Bottom)
+                const rotateHandleX = document.createElement('div');
+                rotateHandleX.className = 'rotate-handle-x';
+                // Rotate Y Handle (Top)
+                const rotateHandleY = document.createElement('div');
+                rotateHandleY.className = 'rotate-handle-y';
+                // Rotate Z Handle (Right)
+                const rotateHandleZ = document.createElement('div');
+                rotateHandleZ.className = 'rotate-handle-z';
+
+                function handleRotateStart(e, axis) {
+                    e.stopPropagation();
+                    selectCaption(c.id);
+                    isRotatingCaption = true;
+                    rotatingAxis = axis;
+                    dragStartX = e.touches ? e.touches[0].clientX : e.clientX;
+                    dragStartY = e.touches ? e.touches[0].clientY : e.clientY;
+                    
+                    const t = c.transform_3d || {};
+                    const rot = t.rotation || {};
+                    initialValX = rot.x || 0;
+                    initialValY = rot.y || 0;
+                    initialValZ = rot.z || 0;
+                    if(isPlaying) playBtn.click();
+                }
+
+                rotateHandleX.addEventListener('mousedown', (e) => handleRotateStart(e, 'x'));
+                rotateHandleX.addEventListener('touchstart', (e) => handleRotateStart(e, 'x'), {passive: false});
+                
+                rotateHandleY.addEventListener('mousedown', (e) => handleRotateStart(e, 'y'));
+                rotateHandleY.addEventListener('touchstart', (e) => handleRotateStart(e, 'y'), {passive: false});
+                
+                rotateHandleZ.addEventListener('mousedown', (e) => handleRotateStart(e, 'z'));
+                rotateHandleZ.addEventListener('touchstart', (e) => handleRotateStart(e, 'z'), {passive: false});
+
+                wrapper.appendChild(textEl);
+                wrapper.appendChild(rotateHandleX);
+                wrapper.appendChild(rotateHandleY);
+                wrapper.appendChild(rotateHandleZ);
+                captionsContainer.appendChild(wrapper);
+                
+                updateSingleCaptionTransform(c);
+            });
+            updateCaptionVisibility();
+        }
+
+        function updateCaptionVisibility() {
+            if (!projectData) return;
+            projectData.captions.forEach(c => {
+                const el = document.getElementById(c.id);
+                if (el) {
+                    const isVisible = (currentTime >= c.start_time && currentTime <= c.end_time) || c.id === selectedCaptionId;
+                    if (isVisible) {
+                        el.style.pointerEvents = 'auto';
+                        updateSingleCaptionTransform(c); // Aplikovat animační výpočet dynamicky
+                        
+                        let opacity = 1;
+                        if(c.id !== selectedCaptionId) {
+                            const inTime = Math.max(0, currentTime - c.start_time);
+                            const outTime = Math.max(0, c.end_time - currentTime);
+                            if(inTime < 0.15 && c.animation_in && c.animation_in !== 'none') opacity = inTime / 0.15;
+                            if(outTime < 0.15 && c.animation_out && c.animation_out !== 'none') opacity = outTime / 0.15;
+                        }
+                        el.style.opacity = opacity;
+
+                        // Přehrání SFX
+                        if (isPlaying) {
+                            const vol = c.sfx_volume !== undefined ? c.sfx_volume : 30;
+                            if (c.sfx_in && currentTime >= c.start_time && !c._playedIn) {
+                                playSfx(c.animation_in, vol); c._playedIn = true;
+                            }
+                            if (c.sfx_out && currentTime >= c.end_time - 0.2 && !c._playedOut) {
+                                playSfx(c.animation_out, vol); c._playedOut = true;
+                            }
+                        }
+                    } else {
+                        el.style.opacity = 0; el.style.pointerEvents = 'none';
+                    }
+                    
+                    // Reset stavů pro zvuk, pokud jsme se posunuli v čase před titulek
+                    if (currentTime < c.start_time) c._playedIn = false;
+                    if (currentTime < c.end_time - 0.2) c._playedOut = false;
+                }
+            });
+        }
+
+        function updateUI() {
+            timeDisplay.textContent = currentTime.toFixed(1) + 's';
+            timeSlider.value = currentTime;
+            updateCaptionVisibility();
+        }
+
+        function loop(timestamp) {
+            if (!lastTimestamp) lastTimestamp = timestamp;
+            const delta = (timestamp - lastTimestamp) / 1000;
+            lastTimestamp = timestamp;
+
+            if (isPlaying) {
+                currentTime += delta;
+                if (currentTime > maxTime) currentTime = 0;
+                updateUI();
+            }
+            animationFrame = requestAnimationFrame(loop);
+        }
+
+        // --- GLOBAL DRAG EVENTS ---
+        function handleGlobalMove(e) {
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            if (isDraggingCaption && selectedCaptionId) {
+                if(e.cancelable) e.preventDefault(); 
+                const scale = Math.max(projectData.resolution.width / videoBox.clientWidth, projectData.resolution.height / videoBox.clientHeight); 
+                const dx = (clientX - dragStartX) * scale;
+                const dy = (clientY - dragStartY) * scale;
+
+                const caption = projectData.captions.find(c => c.id === selectedCaptionId);
+                if(!caption.transform_3d) caption.transform_3d = {};
+                if(!caption.transform_3d.position) caption.transform_3d.position = {};
+                
+                let newX = initialValX + dx;
+                let newY = initialValY + dy;
+                
+                const cx = projectData.resolution.width / 2; // 540
+                const cy = projectData.resolution.height / 2; // 960
+                const snapDist = 25; // Magnetická přitažlivost 25px
+                
+                const guideV = document.getElementById('guideV');
+                const guideH = document.getElementById('guideH');
+                
+                if(Math.abs(newX - cx) < snapDist) { newX = cx; guideV.classList.add('snapped'); } 
+                else { guideV.classList.remove('snapped'); }
+                
+                if(Math.abs(newY - cy) < snapDist) { newY = cy; guideH.classList.add('snapped'); } 
+                else { guideH.classList.remove('snapped'); }
+                
+                caption.transform_3d.position.x = newX;
+                caption.transform_3d.position.y = newY; 
+                
+                updateSingleCaptionTransform(caption);
+                populateInspector(caption);
+            }
+            else if (isRotatingCaption && selectedCaptionId) {
+                if(e.cancelable) e.preventDefault();
+                const dx = (clientX - dragStartX) * 0.5;
+                const dy = (clientY - dragStartY) * 0.5;
+
+                const caption = projectData.captions.find(c => c.id === selectedCaptionId);
+                if(!caption.transform_3d) caption.transform_3d = {};
+                if(!caption.transform_3d.rotation) caption.transform_3d.rotation = {};
+                
+                if(rotatingAxis === 'z') {
+                    caption.transform_3d.rotation.z = initialValZ + dy; // Pull down/up to rotate
+                } else if (rotatingAxis === 'x') {
+                    caption.transform_3d.rotation.x = initialValX - dy; // Pull down/up to tilt
+                } else if (rotatingAxis === 'y') {
+                    caption.transform_3d.rotation.y = initialValY + dx; // Pull left/right to pan
+                }
+                
+                updateSingleCaptionTransform(caption);
+                populateInspector(caption);
+            }
+            else if (isDraggingTimeline && draggingMarkerId) {
+                if(e.cancelable) e.preventDefault();
+                const rect = sliderWrapper.getBoundingClientRect();
+                let percent = (clientX - rect.left) / rect.width;
+                percent = Math.max(0, Math.min(1, percent));
+                const newTime = percent * maxTime;
+
+                const caption = projectData.captions.find(c => c.id === draggingMarkerId);
+                
+                if (draggingTimelineType === 'left') {
+                    caption.start_time = Math.min(newTime, caption.end_time - 0.1);
+                    currentTime = caption.start_time;
+                } else if (draggingTimelineType === 'right') {
+                    caption.end_time = Math.max(newTime, caption.start_time + 0.1);
+                    currentTime = caption.end_time;
+                } else if (draggingTimelineType === 'body') {
+                    const duration = caption.end_time - caption.start_time;
+                    caption.start_time = Math.max(0, Math.min(newTime - dragOffsetTime, maxTime - duration));
+                    caption.end_time = caption.start_time + duration;
+                    currentTime = caption.start_time;
+                }
+                
+                updateSingleMarkerUI(caption);
+                updateUI();
+                if(draggingMarkerId === selectedCaptionId) populateInspector(caption);
+            }
+        }
+        
+        function handleGlobalEnd() { 
+            if(isDraggingTimeline) {
+                renderCaptionList(); 
+            }
+            if(isDraggingCaption) {
+                document.getElementById('safeZoneOverlay').classList.remove('visible');
+                document.getElementById('guideV').classList.remove('snapped');
+                document.getElementById('guideH').classList.remove('snapped');
+            }
+            isDraggingCaption = false; 
+            isRotatingCaption = false;
+            isDraggingTimeline = false;
+            draggingMarkerId = null;
+        }
+
+        document.addEventListener('mousemove', handleGlobalMove);
+        document.addEventListener('touchmove', handleGlobalMove, {passive: false});
+        document.addEventListener('mouseup', handleGlobalEnd);
+        document.addEventListener('touchend', handleGlobalEnd);
+
+        // --- Inspector Logic ---
+        function selectCaption(id) {
+            selectedCaptionId = id;
+            const caption = projectData.captions.find(c => c.id === id);
+            if(!caption) return;
+            
+            document.querySelectorAll('.caption-item').forEach(el => el.classList.remove('active'));
+            const listItems = document.querySelectorAll('.caption-item');
+            const index = projectData.captions.findIndex(c => c.id === id);
+            if(index !== -1 && listItems[index]) listItems[index].classList.add('active');
+
+            document.querySelectorAll('.marker').forEach(el => el.classList.remove('selected'));
+            const marker = document.getElementById('marker_' + id);
+            if(marker) marker.classList.add('selected');
+
+            document.querySelectorAll('.caption-wrapper').forEach(el => el.classList.remove('selected'));
+            const wrapper = document.getElementById(id);
+            if(wrapper) wrapper.classList.add('selected');
+
+            populateInspector(caption);
+            emptyInspector.style.display = 'none';
+            inspectorContent.style.display = 'block';
+            updateCaptionVisibility();
+        }
+
+        function rgbToHex(rgbStr) {
+            if(!rgbStr) return '#FFFFFF';
+            if(rgbStr.startsWith('#')) return rgbStr;
+            const rgb = rgbStr.match(/\d+/g);
+            if(!rgb) return '#FFFFFF';
+            return "#" + ((1 << 24) + (parseInt(rgb[0]) << 16) + (parseInt(rgb[1]) << 8) + parseInt(rgb[2])).toString(16).slice(1).toUpperCase();
+        }
+
+        function populateInspector(c) {
+            document.getElementById('propText').value = c.text;
+            document.getElementById('propStart').value = c.start_time.toFixed(2);
+            document.getElementById('propEnd').value = c.end_time.toFixed(2);
+            document.getElementById('propTrack').value = c.track || 0;
+            
+            document.getElementById('propAnimationIn').value = c.animation_in || 'none';
+            document.getElementById('propSfxIn').checked = c.sfx_in || false;
+            document.getElementById('propAnimationOut').value = c.animation_out || 'none';
+            document.getElementById('propSfxOut').checked = c.sfx_out || false;
+            
+            const sfxVol = c.sfx_volume !== undefined ? c.sfx_volume : 30;
+            document.getElementById('propSfxVolume').value = sfxVol;
+            document.getElementById('lblSfxVol').textContent = sfxVol + '%';
+            
+            const styleObj = c.style || {};
+            document.getElementById('propFont').value = styleObj.font_family || 'Inter';
+            document.getElementById('propSize').value = styleObj.font_size || 100;
+            
+            // Transform
+            const t = c.transform_3d || {};
+            const pos = t.position || {};
+            const rot = t.rotation || {};
+            document.getElementById('propX').value = Math.round(pos.x || 0);
+            document.getElementById('propY').value = Math.round(pos.y || 0);
+            document.getElementById('propZ').value = Math.round(pos.z || 0);
+            document.getElementById('propRotX').value = Math.round(rot.x || 0);
+            document.getElementById('propRotY').value = Math.round(rot.y || 0);
+            document.getElementById('propRotZ').value = Math.round(rot.z || 0);
+
+            // Color / Gradient
+            const isGradient = typeof styleObj.color === 'object';
+            document.getElementById('propGradient').checked = isGradient;
+            document.getElementById('gradientSettings').style.display = isGradient ? 'block' : 'none';
+            document.getElementById('propColorSolid').parentElement.style.opacity = isGradient ? '0.3' : '1';
+            document.getElementById('propColorSolid').disabled = isGradient;
+            
+            if(isGradient && styleObj.color.colors) {
+                document.getElementById('propGrad1').value = rgbToHex(styleObj.color.colors[0]);
+                document.getElementById('propGrad2').value = rgbToHex(styleObj.color.colors[1] || styleObj.color.colors[0]);
+            } else {
+                document.getElementById('propColorSolid').value = rgbToHex(styleObj.color);
+            }
+
+            // Shadow
+            const hasShadow = !!styleObj.shadow;
+            document.getElementById('propShadow').checked = hasShadow;
+            document.getElementById('shadowSettings').style.display = hasShadow ? 'block' : 'none';
+            if(hasShadow) {
+                document.getElementById('propShadowBlur').value = styleObj.shadow.blur || 10;
+                document.getElementById('lblShadowBlur').textContent = `(${styleObj.shadow.blur || 10})`;
+            }
+
+            // Glow
+            const hasGlow = !!styleObj.glow;
+            document.getElementById('propGlow').checked = hasGlow;
+            document.getElementById('glowSettings').style.display = hasGlow ? 'block' : 'none';
+            if(hasGlow) {
+                document.getElementById('propGlowBlur').value = styleObj.glow.blur || 20;
+                document.getElementById('lblGlowBlur').textContent = `(${styleObj.glow.blur || 20})`;
+                document.getElementById('propGlowColor').value = rgbToHex(styleObj.glow.color);
+            }
+        }
+
+        function updateProp(propName, value) {
+            if(!selectedCaptionId) return;
+            const c = projectData.captions.find(c => c.id === selectedCaptionId);
+            if(!c) return;
+
+            if(!c.style) c.style = {};
+            if(!c.transform_3d) c.transform_3d = {};
+            if(!c.transform_3d.position) c.transform_3d.position = {};
+            if(!c.transform_3d.rotation) c.transform_3d.rotation = {};
+            
+            if(propName === 'text') { c.text = value; renderCaptionList(); }
+            if(propName === 'start_time') { c.start_time = Math.max(0, parseFloat(value) || 0); calcMaxTime(); setupTimeline(); updateCaptionVisibility(); }
+            if(propName === 'end_time') { c.end_time = Math.max(c.start_time + 0.1, parseFloat(value) || 0); calcMaxTime(); setupTimeline(); updateCaptionVisibility(); }
+            if(propName === 'track') { c.track = parseInt(value) || 0; setupTimeline(); }
+            
+            if(propName === 'animation_in') c.animation_in = value;
+            if(propName === 'animation_out') c.animation_out = value;
+            if(propName === 'sfx_in') c.sfx_in = value;
+            if(propName === 'sfx_out') c.sfx_out = value;
+            if(propName === 'sfx_volume') {
+                c.sfx_volume = parseInt(value);
+                document.getElementById('lblSfxVol').textContent = value + '%';
+            }
+            
+            if(propName === 'font_family') {
+                loadFontDynamic(value);
+                c.style.font_family = value;
+            }
+            if(propName === 'font_size') c.style.font_size = parseInt(value) || 100;
+            
+            if(propName === 'color_solid') c.style.color = value;
+            if(propName === 'color_grad1') {
+                if(typeof c.style.color !== 'object') c.style.color = {type: 'gradient', colors: [value, '#000000']};
+                else c.style.color.colors[0] = value;
+            }
+            if(propName === 'color_grad2') {
+                if(typeof c.style.color !== 'object') c.style.color = {type: 'gradient', colors: ['#ffffff', value]};
+                else c.style.color.colors[1] = value;
+            }
+
+            if(propName === 'shadow_blur') { c.style.shadow.blur = parseInt(value); document.getElementById('lblShadowBlur').textContent = `(${value})`; }
+            if(propName === 'glow_blur') { c.style.glow.blur = parseInt(value); document.getElementById('lblGlowBlur').textContent = `(${value})`; }
+            if(propName === 'glow_color') { c.style.glow.color = value; }
+
+            if(propName === 'pos_x') c.transform_3d.position.x = parseFloat(value) || 0;
+            if(propName === 'pos_y') c.transform_3d.position.y = parseFloat(value) || 0;
+            if(propName === 'pos_z') c.transform_3d.position.z = parseFloat(value) || 0;
+            if(propName === 'rot_x') c.transform_3d.rotation.x = parseFloat(value) || 0;
+            if(propName === 'rot_y') c.transform_3d.rotation.y = parseFloat(value) || 0;
+            if(propName === 'rot_z') c.transform_3d.rotation.z = parseFloat(value) || 0;
+
+            renderCaptions(); 
+            selectCaption(selectedCaptionId); 
+        }
+
+        function updateStyleToggle(type, isChecked) {
+            if(!selectedCaptionId) return;
+            const c = projectData.captions.find(c => c.id === selectedCaptionId);
+            if(!c) return;
+            if(!c.style) c.style = {};
+            
+            if(type === 'gradient') {
+                if(isChecked) c.style.color = { type: 'gradient', colors: ['#D4AF37', '#AA771C'] };
+                else c.style.color = '#FFFFFF';
+            }
+            if(type === 'shadow') {
+                if(isChecked) c.style.shadow = { offset_x: 0, offset_y: 5, blur: 15, color: 'rgba(0,0,0,0.9)' };
+                else delete c.style.shadow;
+            }
+            if(type === 'glow') {
+                if(isChecked) c.style.glow = { blur: 20, color: '#D4AF37' };
+                else delete c.style.glow;
+            }
+            renderCaptions();
+            selectCaption(selectedCaptionId);
+        }
+
+        function handleWorkspaceClick(e) {
+            if(e.target.id === 'workspace' || e.target.id === 'videoBox' || e.target.classList.contains('mock-video-bg')) {
+                selectedCaptionId = null;
+                document.querySelectorAll('.caption-item').forEach(el => el.classList.remove('active'));
+                document.querySelectorAll('.marker').forEach(el => el.classList.remove('selected'));
+                document.querySelectorAll('.caption-wrapper').forEach(el => el.classList.remove('selected'));
+                emptyInspector.style.display = 'block';
+                inspectorContent.style.display = 'none';
+                updateCaptionVisibility();
+            }
+        }
+        document.getElementById('workspace').addEventListener('mousedown', handleWorkspaceClick);
+        document.getElementById('workspace').addEventListener('touchstart', handleWorkspaceClick);
+
+        // --- Nové Funkce: Přidání Titulku a Presety ---
+        function addNewCaption() {
+            if(!projectData) return;
+            const newId = "custom_" + Date.now();
+            const newCap = {
+                id: newId,
+                text: "Nový text",
+                start_time: currentTime,
+                end_time: Math.min(currentTime + 1.5, Math.ceil(currentTime) + 2),
+                category: "Normal",
+                style: {
+                    font_family: "Inter",
+                    font_size: 100,
+                    font_weight: "900",
+                    color: "#FFFFFF"
+                },
+                transform_3d: {
+                    position: {x: projectData.resolution.width/2, y: projectData.resolution.height/2, z: 0},
+                    rotation: {x: 0, y: 0, z: 0}
+                },
+                animation_in: "pop",
+                animation_out: "none",
+                layering: { z_index: "front" }
+            };
+            projectData.captions.push(newCap);
+            calcMaxTime();
+            renderCaptionList();
+            setupTimeline();
+            renderCaptions();
+            selectCaption(newId);
+        }
+
+        function loadPresetsUI() {
+            const container = document.getElementById('presetsContainer');
+            container.innerHTML = '';
+            let presets = [];
+            try { presets = JSON.parse(localStorage.getItem('iv_presets')) || []; } catch(e){}
+            
+            if(presets.length === 0) {
+                container.innerHTML = '<span style="color:var(--text-secondary); font-size: 0.8rem;">Zatím nemáš uložené žádné šablony.</span>';
+                return;
+            }
+
+            presets.forEach((p, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-export';
+                btn.style.padding = '4px 8px'; btn.style.fontSize = '0.8rem';
+                btn.textContent = p.name;
+                btn.onclick = () => applyPreset(p);
+                
+                // Přidat možnost smazání presetu pravým tlačítkem
+                btn.oncontextmenu = (e) => {
+                    e.preventDefault();
+                    if(confirm("Smazat šablonu '" + p.name + "'?")) {
+                        presets.splice(index, 1);
+                        localStorage.setItem('iv_presets', JSON.stringify(presets));
+                        loadPresetsUI();
+                    }
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function savePreset() {
+            if(!selectedCaptionId) return;
+            const c = projectData.captions.find(x => x.id === selectedCaptionId);
+            if(!c) return;
+            
+            const name = prompt("Zadej název šablony (např. 'Zlatý Křik'):");
+            if(!name) return;
+
+            const preset = {
+                name: name,
+                style: JSON.parse(JSON.stringify(c.style || {})),
+                transform_3d: JSON.parse(JSON.stringify(c.transform_3d || {})),
+                animation_in: c.animation_in || 'none',
+                animation_out: c.animation_out || 'none'
+            };
+
+            let presets = [];
+            try { presets = JSON.parse(localStorage.getItem('iv_presets')) || []; } catch(e){}
+            presets.push(preset);
+            localStorage.setItem('iv_presets', JSON.stringify(presets));
+            loadPresetsUI();
+        }
+
+        function applyPreset(p) {
+            if(!selectedCaptionId) return;
+            const c = projectData.captions.find(x => x.id === selectedCaptionId);
+            if(!c) return;
+
+            c.style = JSON.parse(JSON.stringify(p.style));
+            
+            // Zachovat původní X a Y pozici na obrazovce, ale přepsat velikost, Z rotace atd.
+            const oldPos = c.transform_3d?.position || {x:540, y:960};
+            c.transform_3d = JSON.parse(JSON.stringify(p.transform_3d));
+            c.transform_3d.position.x = oldPos.x;
+            c.transform_3d.position.y = oldPos.y;
+            
+            c.animation_in = p.animation_in;
+            c.animation_out = p.animation_out;
+            
+            if(c.style.font_family) loadFontDynamic(c.style.font_family);
+
+            renderCaptions();
+            selectCaption(c.id);
+        }
+
+        function exportJson() {
+            if(!projectData) return;
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(projectData, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href",     dataStr);
+            downloadAnchorNode.setAttribute("download", "output_captions.json");
+            document.body.appendChild(downloadAnchorNode); 
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        playBtn.addEventListener('click', () => {
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+                playBtn.classList.add('playing');
+                if (currentTime >= maxTime) currentTime = 0;
+                lastTimestamp = null;
+                animationFrame = requestAnimationFrame(loop);
+            } else {
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+                playBtn.classList.remove('playing');
+                cancelAnimationFrame(animationFrame);
+            }
+        });
+
+        timeSlider.addEventListener('input', (e) => {
+            currentTime = parseFloat(e.target.value);
+            updateUI();
+        });
+
+        init();
+    </script>
+</body>
+</html>
