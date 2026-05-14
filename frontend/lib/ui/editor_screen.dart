@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform;
-import 'package:universal_io/io.dart'; // Unified cross platform safe replacement for dart:io
-import 'package:universal_html/html.dart' as html; // For web blob creation
+import 'package:universal_io/io.dart';
+import 'package:universal_html/html.dart' as html;
 import 'dart:js_interop';
 import 'dart:js_interop_unsafe';
 import 'package:flutter/material.dart';
@@ -14,6 +14,7 @@ import 'package:media_kit_video/media_kit_video.dart';
 import 'package:file_picker/file_picker.dart';
 import '../models/caption_model.dart';
 import '../services/mock_data_provider.dart';
+import '../main.dart';
 import 'caption_overlay.dart';
 import 'timeline_widget.dart';
 import 'inspector_widget.dart';
@@ -26,7 +27,7 @@ class EditorScreen extends StatefulWidget {
   State<EditorScreen> createState() => _EditorScreenState();
 }
 
-class _EditorScreenState extends State<EditorScreen> {
+class _EditorScreenState extends State<EditorScreen> with TickerProviderStateMixin {
   CaptionProject? project;
   double _currentTime = 0.0;
   double _videoDuration = 5.0;
@@ -38,13 +39,14 @@ class _EditorScreenState extends State<EditorScreen> {
   bool _isTranscribing = false;
   bool _isMasking = false;
   String? _maskPath;
-  String? _maskBwPath; // B&W grayscale mask URL for mobile canvas compositing
+  String? _maskBwPath;
   bool _mobileCanvasRegistered = false;
   final List<CaptionStyle> _presets = [];
+  bool _inspectorCollapsed = false;
 
   // Media Kit
   late final Player _player;
-  late final Player _maskPlayer; // Secondary player for mask
+  late final Player _maskPlayer;
   late final VideoController _videoController;
   late final VideoController _maskController;
   Timer? _syncTimer;
@@ -62,7 +64,6 @@ class _EditorScreenState extends State<EditorScreen> {
       ),
     );
 
-    // Listen to player state
     _player.stream.duration.listen((duration) {
       if (duration.inMilliseconds > 0) {
         setState(() {
@@ -80,7 +81,6 @@ class _EditorScreenState extends State<EditorScreen> {
       } else {
         _maskPlayer.pause();
       }
-      // Also sync JS canvas on mobile
       if (kIsWeb && _mobileCanvasRegistered) {
         _callMaskCanvasJS('setPlaying', [playing.toJS]);
       }
@@ -93,8 +93,6 @@ class _EditorScreenState extends State<EditorScreen> {
     });
 
     _loadData();
-    
-    // Periodic check deactivated for web performance, relies on togglePlay sync
   }
 
   Future<void> _loadData() async {
@@ -109,63 +107,67 @@ class _EditorScreenState extends State<EditorScreen> {
       final result = await FilePicker.platform.pickFiles(
         type: FileType.video,
         allowMultiple: false,
-        withData: kIsWeb, // Force read bytes on Web
+        withData: kIsWeb,
         dialogTitle: 'Vyber video soubor',
       );
 
-    if (result != null && result.files.single.name.isNotEmpty) {
-      final file = result.files.single;
-      final name = file.name;
-      String? sourceToPlay;
+      if (result != null && result.files.single.name.isNotEmpty) {
+        final file = result.files.single;
+        final name = file.name;
+        String? sourceToPlay;
 
-      if (kIsWeb) {
-        // On Web, generate a blob URL for MediaKit
-        if (file.bytes != null) {
-          final blob = html.Blob([file.bytes!], 'video/mp4');
-          sourceToPlay = html.Url.createObjectUrlFromBlob(blob);
-          setState(() {
-            _videoBytes = file.bytes;
-            _videoName = name;
-            _videoPath = sourceToPlay; // Store the playable URL as our main reference
-          });
+        if (kIsWeb) {
+          if (file.bytes != null) {
+            final blob = html.Blob([file.bytes!], 'video/mp4');
+            sourceToPlay = html.Url.createObjectUrlFromBlob(blob);
+            setState(() {
+              _videoBytes = file.bytes;
+              _videoName = name;
+              _videoPath = sourceToPlay;
+            });
+          } else {
+            if (mounted) {
+              _showSnackBar('Chyba: Nepodařilo se načíst data videa z prohlížeče.');
+            }
+          }
         } else {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Chyba: Nepodařilo se načíst data videa z prohlížeče. Zkuste menší soubor.')),
-            );
+          if (file.path != null) {
+            sourceToPlay = file.path!;
+            final bytes = await File(sourceToPlay).readAsBytes();
+            setState(() {
+              _videoPath = sourceToPlay;
+              _videoName = name;
+              _videoBytes = bytes;
+            });
           }
         }
-      } else {
-        // On Desktop, use local path
-        if (file.path != null) {
-          sourceToPlay = file.path!;
-          // We also read bytes eagerly for upload service
-          final bytes = await File(sourceToPlay).readAsBytes();
-          setState(() {
-            _videoPath = sourceToPlay;
-            _videoName = name;
-            _videoBytes = bytes;
-          });
+
+        if (sourceToPlay != null) {
+          await _player.open(Media(sourceToPlay));
+          await _player.pause();
         }
       }
-
-      if (sourceToPlay != null) {
-        await _player.open(Media(sourceToPlay));
-        await _player.pause();
-      }
-    }
     } catch (e) {
       print('Error picking video: $e');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Chyba při nahrávání videa: $e')),
-        );
+        _showSnackBar('Chyba při nahrávání videa: $e');
       }
     }
   }
 
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message, style: const TextStyle(fontSize: 13)),
+        backgroundColor: AppColors.bgElevated,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        margin: const EdgeInsets.all(16),
+      ),
+    );
+  }
+
   Future<void> _runTranscription() async {
-    print('Button Transkribovat clicked. Path: $_videoPath');
     if (_videoPath == null) return;
 
     setState(() {
@@ -176,38 +178,21 @@ class _EditorScreenState extends State<EditorScreen> {
       final api = ApiService();
       
       if (_videoBytes == null) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Chyba: Nemáme k dispozici data videa k odeslání.')),
-          );
-        }
+        if (mounted) _showSnackBar('Chyba: Nemáme k dispozici data videa k odeslání.');
         return;
       }
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Nahrávám video do cloudu... Může to trvat několik minut.')),
-        );
-      }
+      if (mounted) _showSnackBar('Nahrávám video do cloudu...');
       
       final projectId = await api.uploadVideoForTranscription(_videoBytes!, _videoName ?? 'video.mp4');
       
       if (projectId == null) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Chyba: Nepodařilo se nahrát video na server. Je server online?')),
-          );
-        }
+        if (mounted) _showSnackBar('Chyba: Nepodařilo se nahrát video na server.');
         return;
       }
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Video úspěšně nahráno! Nyní čekám na dokončení přepisu (AI pracuje)...')),
-        );
-      }
+      if (mounted) _showSnackBar('Video nahráno! Čekám na přepis...');
       
-      // Poll for results every 3 seconds
       bool completed = false;
       int attempts = 0;
       
@@ -222,37 +207,18 @@ class _EditorScreenState extends State<EditorScreen> {
             _selectedCaptionId = null;
             _isTranscribing = false;
           });
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Přepis úspěšně dokončen a stažen!')),
-            );
-          }
+          if (mounted) _showSnackBar('Přepis dokončen!');
           completed = true;
-        } else {
-          print('Stále se zpracovává (pokus $attempts)...');
         }
       }
       
-      if (!completed) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Časový limit pro přepis vypršel. Server možná stále pracuje.')),
-          );
-        }
+      if (!completed && mounted) {
+        _showSnackBar('Časový limit vypršel. Server možná stále pracuje.');
       }
-
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Chyba při komunikaci s cloudem: $e')),
-        );
-      }
+      if (mounted) _showSnackBar('Chyba: $e');
     } finally {
-      if (mounted) {
-        setState(() {
-          _isTranscribing = false;
-        });
-      }
+      if (mounted) setState(() => _isTranscribing = false);
     }
   }
 
@@ -264,13 +230,11 @@ class _EditorScreenState extends State<EditorScreen> {
     final pos = Duration(milliseconds: (time * 1000).toInt());
     _player.seek(pos);
     _maskPlayer.seek(pos);
-    // Also sync JS canvas on mobile
     if (kIsWeb && _mobileCanvasRegistered) {
       _callMaskCanvasJS('seek', [time.toJS]);
     }
   }
 
-  /// Calls a method on the global MaskCanvas JS object.
   void _callMaskCanvasJS(String method, [List<JSAny?>? args]) {
     if (!kIsWeb) return;
     try {
@@ -291,30 +255,18 @@ class _EditorScreenState extends State<EditorScreen> {
     }
   }
 
-  /// Sets up the JavaScript Canvas compositing for mobile.
   void _setupMobileCanvas(String originalVideoUrl, String bwMaskUrl) {
     if (!kIsWeb) return;
     try {
-      // Call MaskCanvas.create(originalUrl, bwMaskUrl) in JavaScript
       _callMaskCanvasJS('create', [originalVideoUrl.toJS, bwMaskUrl.toJS]);
-      
-      setState(() {
-        _mobileCanvasRegistered = true;
-      });
-      
-      // Sync playback state
-      if (_isPlaying) {
-        _callMaskCanvasJS('play');
-      }
-      
-      print('Mobile canvas mask setup completed');
+      setState(() { _mobileCanvasRegistered = true; });
+      if (_isPlaying) _callMaskCanvasJS('play');
     } catch (e) {
       print('Error setting up mobile canvas: $e');
     }
   }
 
   Future<void> _generateMask() async {
-    print('Button Behind Person clicked. Path: $_videoPath');
     if (_videoPath == null) return;
     setState(() => _isMasking = true);
 
@@ -322,38 +274,21 @@ class _EditorScreenState extends State<EditorScreen> {
       final api = ApiService();
       
       if (_videoBytes == null) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Chyba: Nemáme k dispozici data videa k odeslání.')),
-          );
-        }
+        if (mounted) _showSnackBar('Chyba: Nemáme data videa.');
         return;
       }
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Nahrávám video pro maskování...')),
-        );
-      }
+      if (mounted) _showSnackBar('Nahrávám video pro maskování...');
       
       final projectId = await api.uploadVideoForMasking(_videoBytes!, _videoName ?? 'video.mp4');
       
       if (projectId == null) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Chyba: Nepodařilo se nahrát video na server.')),
-          );
-        }
+        if (mounted) _showSnackBar('Chyba: Nepodařilo se nahrát video.');
         return;
       }
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Generuji masku (AI model SAM 2 pracuje)... Může to trvat několik minut.')),
-        );
-      }
+      if (mounted) _showSnackBar('Generuji masku (SAM 2)...');
       
-      // Poll for results every 5 seconds
       bool completed = false;
       int attempts = 0;
       
@@ -365,19 +300,15 @@ class _EditorScreenState extends State<EditorScreen> {
         if (maskUrls != null) {
           final serverUrl = ApiService.baseUrl.replaceAll('/api/v1', '');
           
-          // B&W mask URL for mobile canvas compositing
           final bwPath = maskUrls['bw'] ?? '';
           final fullBwUrl = bwPath.isNotEmpty ? '$serverUrl$bwPath' : '';
           
-          // Transparent mask for desktop (VP9 alpha WebM or HEVC MOV)
           String maskPathToUse = maskUrls['webm']!;
           if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS) {
             maskPathToUse = maskUrls['mov']!;
           }
           
           final fullMaskUrl = '$serverUrl$maskPathToUse';
-          print('Mask generated successfully: $fullMaskUrl');
-          print('B&W mask for mobile: $fullBwUrl');
           
           final isMobilePlatform = defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android;
           final isMobileWeb = kIsWeb && (MediaQuery.of(context).size.width < 800 || isMobilePlatform);
@@ -389,45 +320,24 @@ class _EditorScreenState extends State<EditorScreen> {
           });
           
           if (isMobileWeb && fullBwUrl.isNotEmpty && _videoPath != null) {
-            // ── MOBILE: Use JavaScript Canvas compositing ──
             _setupMobileCanvas(_videoPath!, fullBwUrl);
           } else {
-            // ── DESKTOP: Use media_kit VP9 alpha video directly ──
             await _maskPlayer.setVolume(0);
-            await _maskPlayer.open(Media(fullMaskUrl), play: false); 
+            await _maskPlayer.open(Media(fullMaskUrl), play: false);
             await _maskPlayer.seek(_player.state.position);
-            if (_player.state.playing) {
-              await _maskPlayer.play();
-            }
+            if (_player.state.playing) await _maskPlayer.play();
           }
           
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Maska úspěšně vygenerována!')),
-            );
-          }
+          if (mounted) _showSnackBar('Maska vygenerována!');
           completed = true;
-        } else {
-          print('Stále se generuje maska (pokus $attempts)...');
         }
       }
       
-      if (!completed && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Časový limit vypršel.')),
-        );
-      }
+      if (!completed && mounted) _showSnackBar('Časový limit vypršel.');
     } catch (e) {
-      print('Mask generation error: $e');
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Chyba při maskování: $e')),
-        );
-      }
+      if (mounted) _showSnackBar('Chyba: $e');
     } finally {
-      if (mounted) {
-        setState(() => _isMasking = false);
-      }
+      if (mounted) setState(() => _isMasking = false);
     }
   }
 
@@ -462,153 +372,329 @@ class _EditorScreenState extends State<EditorScreen> {
   }
 
   void _savePreset(CaptionStyle style) {
-    setState(() {
-      _presets.add(style.copy());
-    });
+    setState(() { _presets.add(style.copy()); });
   }
 
   void _applyPreset(CaptionStyle style) {
     if (_selectedCaptionId == null || project == null) return;
     final caption = project!.captions.where((c) => c.id == _selectedCaptionId).firstOrNull;
     if (caption != null) {
-      setState(() {
-        caption.style = style.copy();
-      });
+      setState(() { caption.style = style.copy(); });
     }
   }
 
-
+  // ─────────────────────────────────────
+  // BUILD
+  // ─────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
     if (project == null) {
-      return const Scaffold(
-        backgroundColor: Color(0xFF0F0F0F),
-        body: Center(child: CircularProgressIndicator(color: Color(0xFFD4AF37))),
+      return Scaffold(
+        backgroundColor: AppColors.bg,
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: 48, height: 48,
+                child: CircularProgressIndicator(
+                  strokeWidth: 3,
+                  color: AppColors.accent,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text('Načítám projekt...', style: TextStyle(color: AppColors.textMuted, fontSize: 14)),
+            ],
+          ),
+        ),
       );
     }
 
-    final bool isMobile = MediaQuery.of(context).size.width < 800 || 
-                          (Theme.of(context).platform == TargetPlatform.iOS || Theme.of(context).platform == TargetPlatform.android);
+    final bool isMobile = MediaQuery.of(context).size.width < 800 ||
+        (Theme.of(context).platform == TargetPlatform.iOS || Theme.of(context).platform == TargetPlatform.android);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF000000),
-      appBar: AppBar(
-        title: Text(isMobile ? 'IvC' : 'IvCaptions - Editor', style: const TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: const Color(0xFF0F0F0F),
-        elevation: 0,
-        actions: isMobile ? [] : [
-          IconButton(
-            onPressed: _openVideoFile,
-            icon: const Icon(Icons.video_file, color: Color(0xFFD4AF37)),
-            tooltip: 'Nahrát video',
-          ),
-          TextButton(
-            onPressed: _openVideoFile,
-            child: Text(_videoName ?? 'Nahrát', style: const TextStyle(color: Colors.white)),
-          ),
-          const SizedBox(width: 8),
-          if (_videoPath != null) ...[
-            _isTranscribing
-                ? const Padding(padding: EdgeInsets.all(8.0), child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFD4AF37))))
-                : IconButton(
-                    onPressed: _runTranscription,
-                    icon: const Icon(Icons.subtitles, color: Color(0xFFD4AF37)),
-                    tooltip: 'Transkribovat',
-                  ),
-            if (!_isTranscribing)
-              TextButton(
-                onPressed: _runTranscription,
-                child: const Text('Transkribovat', style: TextStyle(color: Colors.white)),
-              ),
-            const SizedBox(width: 8),
-            _isMasking
-                ? const Padding(padding: EdgeInsets.all(8.0), child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFD4AF37))))
-                : IconButton(
-                    onPressed: _generateMask,
-                    icon: const Icon(Icons.person_search, color: Color(0xFFD4AF37)),
-                    tooltip: 'Behind Person Mask',
-                  ),
-            if (!_isMasking)
-              TextButton(
-                onPressed: _generateMask,
-                child: const Text('Maska', style: TextStyle(color: Colors.white)),
-              ),
-            if (_maskPath != null)
-              IconButton(
-                icon: const Icon(Icons.layers_clear, color: Colors.redAccent),
-                tooltip: 'Odstranit masku',
-                onPressed: () {
-                  setState(() {
-                    _maskPath = null;
-                    _maskPlayer.pause();
-                  });
-                },
-              ),
-          ],
-          const SizedBox(width: 8),
-        ],
-      ),
+      backgroundColor: AppColors.bg,
       body: isMobile ? _buildMobileLayout() : _buildDesktopLayout(),
     );
   }
 
+  // ─────────────────────────────────────
+  // DESKTOP LAYOUT (new sidebar approach)
+  // ─────────────────────────────────────
+
+  Widget _buildDesktopLayout() {
+    return Row(
+      children: [
+        // Left sidebar (tool icons)
+        _buildSidebar(),
+        // Main content area
+        Expanded(
+          child: Column(
+            children: [
+              // Top toolbar
+              _buildTopToolbar(),
+              // Video preview + optional inspector
+              Expanded(
+                child: Row(
+                  children: [
+                    // Video area
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
+                        child: _buildVideoPreview(),
+                      ),
+                    ),
+                    // Inspector (collapsible)
+                    if (!_inspectorCollapsed)
+                      SizedBox(
+                        width: 340,
+                        child: _buildInspector(),
+                      ),
+                  ],
+                ),
+              ),
+              // Timeline
+              _buildTimeline(isMobile: false),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSidebar() {
+    return Container(
+      width: 56,
+      decoration: BoxDecoration(
+        color: AppColors.bgPanel,
+        border: Border(right: BorderSide(color: AppColors.border.withOpacity(0.5))),
+      ),
+      child: Column(
+        children: [
+          const SizedBox(height: 12),
+          // Logo / brand
+          Container(
+            width: 36, height: 36,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [AppColors.accent, AppColors.accentLight],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Center(
+              child: Text('IV', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 14)),
+            ),
+          ),
+          const SizedBox(height: 20),
+          _sidebarBtn(Icons.movie_outlined, 'Nahrát video', _openVideoFile, isActive: _videoPath != null),
+          _sidebarBtn(Icons.subtitles_outlined, 'Přepis', _videoPath != null ? _runTranscription : null, isLoading: _isTranscribing),
+          _sidebarBtn(Icons.person_outline_rounded, 'Maska', _videoPath != null ? _generateMask : null, isLoading: _isMasking),
+          if (_maskPath != null)
+            _sidebarBtn(Icons.layers_clear_outlined, 'Zrušit masku', () {
+              setState(() { _maskPath = null; _maskPlayer.pause(); });
+            }, color: AppColors.danger),
+          const Spacer(),
+          _sidebarBtn(
+            _inspectorCollapsed ? Icons.chevron_left_rounded : Icons.chevron_right_rounded,
+            _inspectorCollapsed ? 'Otevřít panel' : 'Zavřít panel',
+            () => setState(() => _inspectorCollapsed = !_inspectorCollapsed),
+          ),
+          const SizedBox(height: 12),
+        ],
+      ),
+    );
+  }
+
+  Widget _sidebarBtn(IconData icon, String tooltip, VoidCallback? onTap, {bool isActive = false, bool isLoading = false, Color? color}) {
+    return Tooltip(
+      message: tooltip,
+      preferBelow: false,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: InkWell(
+          onTap: isLoading ? null : onTap,
+          borderRadius: BorderRadius.circular(10),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            width: 40, height: 40,
+            decoration: BoxDecoration(
+              color: isActive ? AppColors.accent.withOpacity(0.12) : Colors.transparent,
+              borderRadius: BorderRadius.circular(10),
+              border: isActive ? Border.all(color: AppColors.accent.withOpacity(0.3)) : null,
+            ),
+            child: Center(
+              child: isLoading
+                  ? SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.accent))
+                  : Icon(icon, size: 20, color: onTap == null ? AppColors.textMuted : (color ?? (isActive ? AppColors.accent : AppColors.textSecondary))),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTopToolbar() {
+    return Container(
+      height: 48,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: AppColors.bgPanel,
+        border: Border(bottom: BorderSide(color: AppColors.border.withOpacity(0.5))),
+      ),
+      child: Row(
+        children: [
+          Text(
+            'IvCaptions',
+            style: TextStyle(
+              color: AppColors.textPrimary,
+              fontWeight: FontWeight.w700,
+              fontSize: 15,
+              letterSpacing: 0.5,
+            ),
+          ),
+          if (_videoName != null) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Icon(Icons.chevron_right, size: 16, color: AppColors.textMuted),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.bgCard,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.videocam_outlined, size: 14, color: AppColors.accent),
+                  const SizedBox(width: 6),
+                  Text(_videoName!, style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                ],
+              ),
+            ),
+          ],
+          const Spacer(),
+          // Time display
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: AppColors.bgCard,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: AppColors.border),
+            ),
+            child: Text(
+              "${_currentTime.toStringAsFixed(1)}s / ${_videoDuration.toStringAsFixed(1)}s",
+              style: const TextStyle(
+                color: AppColors.textPrimary,
+                fontSize: 13,
+                fontFamily: 'monospace',
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ─────────────────────────────────────
+  // MOBILE LAYOUT
+  // ─────────────────────────────────────
+
   Widget _buildMobileLayout() {
     return Column(
       children: [
-        // Video Preview takes up remaining space
+        // Safe area top
+        Container(
+          color: AppColors.bgPanel,
+          child: SafeArea(
+            bottom: false,
+            child: Container(
+              height: 48,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Row(
+                children: [
+                  // Logo
+                  Container(
+                    width: 28, height: 28,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(colors: [AppColors.accent, AppColors.accentLight]),
+                      borderRadius: BorderRadius.circular(7),
+                    ),
+                    child: const Center(child: Text('IV', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 10))),
+                  ),
+                  const SizedBox(width: 10),
+                  Text('IvCaptions', style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 14)),
+                  const Spacer(),
+                  // Time
+                  Text(
+                    "${_currentTime.toStringAsFixed(1)}s",
+                    style: TextStyle(color: AppColors.textSecondary, fontSize: 12, fontFamily: 'monospace'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        // Video Preview
         Expanded(
           child: Container(
             color: Colors.black,
             child: _buildVideoPreview(),
           ),
         ),
-        
         // Mobile Action Bar
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          color: const Color(0xFF0F0F0F),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          decoration: BoxDecoration(
+            color: AppColors.bgPanel,
+            border: Border(top: BorderSide(color: AppColors.border.withOpacity(0.5))),
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildMobileActionBtn(Icons.video_file, 'Nahrát', _openVideoFile),
+              _buildMobileActionBtn(Icons.movie_outlined, 'Nahrát', _openVideoFile),
               if (_videoPath != null) ...[
-                _isTranscribing 
-                    ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFD4AF37)))
-                    : _buildMobileActionBtn(Icons.subtitles, 'Přepis', _runTranscription),
-                _isMasking 
-                    ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFD4AF37)))
-                    : _buildMobileActionBtn(Icons.person_search, 'Maska', _generateMask),
+                _isTranscribing
+                    ? SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.accent))
+                    : _buildMobileActionBtn(Icons.subtitles_outlined, 'Přepis', _runTranscription),
+                _isMasking
+                    ? SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.accent))
+                    : _buildMobileActionBtn(Icons.person_outline_rounded, 'Maska', _generateMask),
                 if (_maskPath != null)
-                  _buildMobileActionBtn(Icons.layers_clear, 'Zrušit', () {
+                  _buildMobileActionBtn(Icons.layers_clear_outlined, 'Zrušit', () {
                     setState(() { _maskPath = null; _maskPlayer.pause(); });
-                  }, color: Colors.redAccent),
+                  }, color: AppColors.danger),
               ],
             ],
           ),
         ),
-
-        // Timeline and Inspector Tabs (reduced height)
+        // Timeline + Inspector (tabs)
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.35,
           child: Container(
-            decoration: const BoxDecoration(
-              color: Color(0xFF151515),
-              border: Border(top: BorderSide(color: Colors.white10)),
+            decoration: BoxDecoration(
+              color: AppColors.bgPanel,
+              border: Border(top: BorderSide(color: AppColors.border.withOpacity(0.5))),
             ),
             child: DefaultTabController(
               length: 2,
               child: Column(
                 children: [
-                  const TabBar(
-                    indicatorColor: Color(0xFFD4AF37),
-                    labelColor: Color(0xFFD4AF37),
-                    unselectedLabelColor: Colors.white54,
+                  TabBar(
+                    indicatorColor: AppColors.accent,
+                    indicatorWeight: 2,
+                    labelColor: AppColors.accent,
+                    unselectedLabelColor: AppColors.textMuted,
                     dividerColor: Colors.transparent,
-                    labelStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-                    tabs: [
-                      Tab(text: 'Timeline', iconMargin: EdgeInsets.zero),
-                      Tab(text: 'Inspektor', iconMargin: EdgeInsets.zero),
+                    labelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                    tabs: const [
+                      Tab(text: 'Timeline'),
+                      Tab(text: 'Inspektor'),
                     ],
                   ),
                   Expanded(
@@ -628,52 +714,36 @@ class _EditorScreenState extends State<EditorScreen> {
     );
   }
 
-  Widget _buildMobileActionBtn(IconData icon, String label, VoidCallback onTap, {Color color = const Color(0xFFD4AF37)}) {
+  Widget _buildMobileActionBtn(IconData icon, String label, VoidCallback onTap, {Color color = AppColors.accent}) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.08),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: color.withOpacity(0.2)),
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: color, size: 24),
-            const SizedBox(height: 4),
-            Text(label, style: TextStyle(color: color, fontSize: 10, height: 1.1), textAlign: TextAlign.center),
+            Icon(icon, color: color, size: 22),
+            const SizedBox(height: 3),
+            Text(label, style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.w600)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildDesktopLayout() {
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            children: [
-              Expanded(
-                flex: 3,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: _buildVideoPreview(),
-                ),
-              ),
-              _buildTimeline(isMobile: false),
-            ],
-          ),
-        ),
-        SizedBox(
-          width: 360,
-          child: _buildInspector(),
-        ),
-      ],
-    );
-  }
+  // ─────────────────────────────────────
+  // VIDEO PREVIEW
+  // ─────────────────────────────────────
 
   Widget _buildVideoPreview() {
-    final bool isMobile = MediaQuery.of(context).size.width < 800 || 
-                          (Theme.of(context).platform == TargetPlatform.iOS || Theme.of(context).platform == TargetPlatform.android);
+    final bool isMobile = MediaQuery.of(context).size.width < 800 ||
+        (Theme.of(context).platform == TargetPlatform.iOS || Theme.of(context).platform == TargetPlatform.android);
 
     return Center(
       child: GestureDetector(
@@ -685,11 +755,14 @@ class _EditorScreenState extends State<EditorScreen> {
           child: Container(
             decoration: BoxDecoration(
               color: Colors.black,
-              borderRadius: BorderRadius.circular(isMobile ? 0 : 12),
-              border: isMobile ? null : Border.all(color: const Color(0xFF2A2A35), width: 2),
+              borderRadius: BorderRadius.circular(isMobile ? 0 : 14),
+              border: isMobile ? null : Border.all(color: AppColors.border, width: 1),
+              boxShadow: isMobile ? null : [
+                BoxShadow(color: Colors.black.withOpacity(0.4), blurRadius: 30, spreadRadius: -5),
+              ],
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(isMobile ? 0 : 10),
+              borderRadius: BorderRadius.circular(isMobile ? 0 : 13),
               child: Stack(
                 fit: StackFit.expand,
                 children: [
@@ -699,41 +772,13 @@ class _EditorScreenState extends State<EditorScreen> {
                       controls: NoVideoControls,
                     )
                   else
-                    Material(
-                      color: const Color(0xFF111116),
-                      child: InkWell(
-                        onTap: _openVideoFile,
-                        hoverColor: Colors.white.withOpacity(0.03),
-                        splashColor: const Color(0xFFD4AF37).withOpacity(0.1),
-                        child: const Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.cloud_upload_rounded, size: 72, color: Color(0xFFD4AF37)),
-                              SizedBox(height: 16),
-                              Text(
-                                "Klikněte zde pro nahrání videa",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.white70, fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(height: 8),
-                              Text(
-                                "MP4, MOV nebo WebM",
-                                style: TextStyle(color: Colors.white38, fontSize: 13),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+                    _buildUploadPrompt(),
                   CaptionOverlay(
                     captions: project!.captions.where((c) => c.style.behindPerson).toList(),
                     currentTime: _currentTime,
                     resolution: project!.resolution,
                     selectedCaptionId: _selectedCaptionId,
-                    onCaptionSelected: (id) {
-                      setState(() { _selectedCaptionId = id; });
-                    },
+                    onCaptionSelected: (id) { setState(() { _selectedCaptionId = id; }); },
                     onCaptionUpdate: () { setState(() {}); },
                   ),
                   if (_maskPath != null && !(_mobileCanvasRegistered && isMobile))
@@ -744,7 +789,6 @@ class _EditorScreenState extends State<EditorScreen> {
                         fill: Colors.transparent,
                       ),
                     ),
-                  // Mobile: JS Canvas composited mask (pixel-level alpha transparency)
                   if (_mobileCanvasRegistered && isMobile)
                     IgnorePointer(
                       child: HtmlElementView.fromTagName(
@@ -755,9 +799,7 @@ class _EditorScreenState extends State<EditorScreen> {
                             if (mc != null) {
                               final appendToFn = mc.getProperty('appendTo'.toJS) as JSFunction?;
                               if (appendToFn != null) {
-                                // Pass the root element wrapper into JS side appending logic safely
                                 appendToFn.callAsFunction(mc, element as JSAny);
-                                print('MaskCanvas: attached safely via JS appendTo');
                               }
                             }
                           } catch (e) {
@@ -771,17 +813,24 @@ class _EditorScreenState extends State<EditorScreen> {
                     currentTime: _currentTime,
                     resolution: project!.resolution,
                     selectedCaptionId: _selectedCaptionId,
-                    onCaptionSelected: (id) {
-                      setState(() { _selectedCaptionId = id; });
-                    },
+                    onCaptionSelected: (id) { setState(() { _selectedCaptionId = id; }); },
                     onCaptionUpdate: () { setState(() {}); },
                   ),
+                  // Play button overlay (mobile)
                   if (isMobile && _videoPath != null && !_isPlaying)
                     Positioned.fill(
                       child: Container(
                         color: Colors.black26,
-                        child: const Center(
-                          child: Icon(Icons.play_arrow_rounded, size: 80, color: Colors.white70),
+                        child: Center(
+                          child: Container(
+                            width: 64, height: 64,
+                            decoration: BoxDecoration(
+                              color: AppColors.accent.withOpacity(0.9),
+                              shape: BoxShape.circle,
+                              boxShadow: [BoxShadow(color: AppColors.accent.withOpacity(0.3), blurRadius: 20)],
+                            ),
+                            child: const Icon(Icons.play_arrow_rounded, size: 36, color: Colors.black),
+                          ),
                         ),
                       ),
                     ),
@@ -794,27 +843,86 @@ class _EditorScreenState extends State<EditorScreen> {
     );
   }
 
+  Widget _buildUploadPrompt() {
+    return Material(
+      color: AppColors.bgCard,
+      child: InkWell(
+        onTap: _openVideoFile,
+        hoverColor: AppColors.bgHover,
+        splashColor: AppColors.accent.withOpacity(0.1),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 80, height: 80,
+                decoration: BoxDecoration(
+                  color: AppColors.accent.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                  border: Border.all(color: AppColors.accent.withOpacity(0.3), width: 2),
+                ),
+                child: const Icon(Icons.cloud_upload_outlined, size: 36, color: AppColors.accent),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                "Nahrát video",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: AppColors.textPrimary, fontSize: 18, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                "MP4, MOV nebo WebM",
+                style: TextStyle(color: AppColors.textMuted, fontSize: 13),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ─────────────────────────────────────
+  // TIMELINE
+  // ─────────────────────────────────────
+
   Widget _buildTimeline({required bool isMobile}) {
     final controls = Row(
       children: [
-        IconButton(
-          icon: Icon(
-            _isPlaying ? Icons.pause_circle_filled : Icons.play_circle_filled,
-            size: isMobile ? 36 : 48,
-            color: const Color(0xFFD4AF37),
+        // Play/Pause button
+        InkWell(
+          onTap: _videoPath != null ? _togglePlay : null,
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            width: isMobile ? 40 : 44,
+            height: isMobile ? 40 : 44,
+            decoration: BoxDecoration(
+              gradient: _videoPath != null
+                  ? const LinearGradient(colors: [AppColors.accent, AppColors.accentLight])
+                  : null,
+              color: _videoPath == null ? AppColors.bgCard : null,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: _videoPath != null ? [
+                BoxShadow(color: AppColors.accent.withOpacity(0.25), blurRadius: 12, spreadRadius: -2),
+              ] : null,
+            ),
+            child: Icon(
+              _isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+              size: isMobile ? 24 : 26,
+              color: _videoPath != null ? Colors.black : AppColors.textMuted,
+            ),
           ),
-          onPressed: _videoPath != null ? _togglePlay : null,
         ),
-        const SizedBox(width: 8),
-        Text(
-          "${_currentTime.toStringAsFixed(1)}s / ${_videoDuration.toStringAsFixed(1)}s",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: isMobile ? 14 : 18,
-            fontFamily: 'monospace',
-            fontWeight: FontWeight.bold,
+        const SizedBox(width: 12),
+        if (!isMobile)
+          Text(
+            "${_currentTime.toStringAsFixed(1)}s / ${_videoDuration.toStringAsFixed(1)}s",
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 14,
+              fontFamily: 'monospace',
+              fontWeight: FontWeight.w600,
+            ),
           ),
-        ),
       ],
     );
 
@@ -825,45 +933,37 @@ class _EditorScreenState extends State<EditorScreen> {
         currentTime: _currentTime,
         maxDuration: _videoDuration,
         selectedCaptionId: _selectedCaptionId,
-        onCaptionSelected: (id) {
-          setState(() {
-            _selectedCaptionId = id;
-          });
-        },
-        onTimeChanged: (newTime) {
-          _seekTo(newTime);
-        },
-        onCaptionChanged: () {
-          setState(() {});
-        },
+        onCaptionSelected: (id) { setState(() { _selectedCaptionId = id; }); },
+        onTimeChanged: (newTime) { _seekTo(newTime); },
+        onCaptionChanged: () { setState(() {}); },
       ),
     );
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 8 : 24, 
-        vertical: isMobile ? 8 : 12
+        horizontal: isMobile ? 8 : 16,
+        vertical: isMobile ? 8 : 10,
       ),
-      decoration: const BoxDecoration(
-        color: Color(0xFF0F0F0F),
-        border: Border(top: BorderSide(color: Color(0xFF222222))),
+      decoration: BoxDecoration(
+        color: AppColors.bgPanel,
+        border: Border(top: BorderSide(color: AppColors.border.withOpacity(0.5))),
       ),
-      child: isMobile 
-        ? Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              controls,
-              const SizedBox(height: 8),
-              timeline,
-            ],
-          )
-        : Row(
-            children: [
-              controls,
-              const SizedBox(width: 16),
-              Expanded(child: timeline),
-            ],
-          ),
+      child: isMobile
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                controls,
+                const SizedBox(height: 8),
+                timeline,
+              ],
+            )
+          : Row(
+              children: [
+                controls,
+                const SizedBox(width: 16),
+                Expanded(child: timeline),
+              ],
+            ),
     );
   }
 
@@ -882,20 +982,15 @@ class _EditorScreenState extends State<EditorScreen> {
     );
   }
 
-
-
   @override
   void dispose() {
     _syncTimer?.cancel();
     _player.dispose();
     _maskPlayer.dispose();
-    // Clean up JS canvas resources
     if (kIsWeb && _mobileCanvasRegistered) {
       _callMaskCanvasJS('dispose');
     }
     super.dispose();
   }
 }
-
-
 

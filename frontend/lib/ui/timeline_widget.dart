@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import '../models/caption_model.dart';
+import '../main.dart';
 import 'dart:math' as math;
 
 class TimelineWidget extends StatefulWidget {
@@ -33,10 +34,9 @@ class _TimelineWidgetState extends State<TimelineWidget> {
   double _zoom = 1.0;
   final ScrollController _scrollCtrl = ScrollController();
 
-  // Resize state
   String? _resizingId;
   bool _resizingLeft = false;
-  bool _isInteracting = false; // Track active thumb/drag gestures to lock scrollview
+  bool _isInteracting = false;
 
   @override
   void dispose() {
@@ -49,19 +49,19 @@ class _TimelineWidgetState extends State<TimelineWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Zoom controls row
+        // Zoom controls
         SizedBox(
-          height: 20,
+          height: 22,
           child: Row(
             children: [
-              const Icon(Icons.zoom_out, size: 14, color: Colors.white38),
+              Icon(Icons.zoom_out_rounded, size: 14, color: AppColors.textMuted),
               SizedBox(
                 width: 100,
                 child: SliderTheme(
                   data: SliderThemeData(
-                    activeTrackColor: const Color(0xFFD4AF37),
-                    inactiveTrackColor: const Color(0xFF333333),
-                    thumbColor: const Color(0xFFD4AF37),
+                    activeTrackColor: AppColors.accent,
+                    inactiveTrackColor: AppColors.border,
+                    thumbColor: AppColors.accent,
                     thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 5),
                     trackHeight: 2,
                     overlayShape: SliderComponentShape.noOverlay,
@@ -74,9 +74,19 @@ class _TimelineWidgetState extends State<TimelineWidget> {
                   ),
                 ),
               ),
-              const Icon(Icons.zoom_in, size: 14, color: Colors.white38),
+              Icon(Icons.zoom_in_rounded, size: 14, color: AppColors.textMuted),
               const SizedBox(width: 8),
-              Text('${_zoom.toStringAsFixed(1)}x', style: const TextStyle(color: Colors.white38, fontSize: 10, fontFamily: 'monospace')),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: AppColors.bgCard,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Text(
+                  '${_zoom.toStringAsFixed(1)}x',
+                  style: TextStyle(color: AppColors.textMuted, fontSize: 10, fontFamily: 'monospace'),
+                ),
+              ),
             ],
           ),
         ),
@@ -96,14 +106,13 @@ class _TimelineWidgetState extends State<TimelineWidget> {
                 final viewportWidth = outerConstraints.maxWidth > 0 ? outerConstraints.maxWidth : 800.0;
                 return RawScrollbar(
                   controller: _scrollCtrl,
-                  thumbColor: const Color(0xFFD4AF37),
+                  thumbColor: AppColors.accent.withOpacity(0.5),
                   radius: const Radius.circular(8),
-                  thickness: 8,
-                  thumbVisibility: true, // Always visible
+                  thickness: 6,
+                  thumbVisibility: true,
                   child: SingleChildScrollView(
                     controller: _scrollCtrl,
                     scrollDirection: Axis.horizontal,
-                    // Lock scrolling immediately when dragging/resizing a caption block!
                     physics: _isInteracting ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
                     child: _buildTimelineContent(viewportWidth),
                   ),
@@ -126,107 +135,140 @@ class _TimelineWidgetState extends State<TimelineWidget> {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-            // Track backgrounds + time rulers
-            ...List.generate(maxTracks, (i) => Positioned(
-              top: i * trackHeight,
-              left: 0,
-              width: totalWidth,
-              height: trackHeight,
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.06))),
-                ),
-              ),
-            )),
-
-            // Time markers (every second)
-            ...List.generate(
-              widget.maxDuration.ceil() + 1,
-              (i) => Positioned(
-                left: i * pps,
-                top: 0,
-                bottom: 0,
-                child: Container(
-                  width: 1,
-                  color: i % 5 == 0 ? Colors.white.withOpacity(0.15) : Colors.white.withOpacity(0.05),
-                ),
+          // Track backgrounds
+          ...List.generate(maxTracks, (i) => Positioned(
+            top: i * trackHeight,
+            left: 0,
+            width: totalWidth,
+            height: trackHeight,
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(color: AppColors.border.withOpacity(0.3))),
               ),
             ),
+          )),
 
-            // Second labels
-            ...List.generate(
-              (widget.maxDuration / (_zoom > 3 ? 1 : 5)).ceil() + 1,
-              (i) {
-                final sec = i * (_zoom > 3 ? 1 : 5);
-                if (sec > widget.maxDuration) return const SizedBox.shrink();
-                return Positioned(
-                  left: sec * pps + 2,
-                  top: 1,
-                  child: Text('${sec.toStringAsFixed(0)}s', style: TextStyle(color: Colors.white.withOpacity(0.2), fontSize: 9, fontFamily: 'monospace')),
-                );
-              },
-            ),
-
-            // Caption blocks
-            ...widget.captions.map((c) => _buildCaptionBlock(c, pps)),
-
-            // Playhead
-            Positioned(
-              left: widget.currentTime * pps,
+          // Time markers
+          ...List.generate(
+            widget.maxDuration.ceil() + 1,
+            (i) => Positioned(
+              left: i * pps,
               top: 0,
               bottom: 0,
-              width: 2,
-              child: Container(color: Colors.redAccent),
-            ),
-            Positioned(
-              left: (widget.currentTime * pps) - 6,
-              top: -2,
-              child: CustomPaint(
-                size: const Size(12, 10),
-                painter: _PlayheadPainter(),
+              child: Container(
+                width: 1,
+                color: i % 5 == 0
+                    ? AppColors.border.withOpacity(0.6)
+                    : AppColors.border.withOpacity(0.2),
               ),
             ),
-            // Dedicated scrubbing area (Top strip)
-            Positioned(
-              top: 0, left: 0, right: 0, height: 28,
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTapDown: (d) {
-                  double newTime = d.localPosition.dx / pps;
-                  widget.onTimeChanged(newTime.clamp(0.0, widget.maxDuration));
-                },
-                onHorizontalDragUpdate: (d) {
-                  double newTime = d.localPosition.dx / pps;
-                  widget.onTimeChanged(newTime.clamp(0.0, widget.maxDuration));
-                },
-                child: Container(color: Colors.transparent),
+          ),
+
+          // Second labels
+          ...List.generate(
+            (widget.maxDuration / (_zoom > 3 ? 1 : 5)).ceil() + 1,
+            (i) {
+              final sec = i * (_zoom > 3 ? 1 : 5);
+              if (sec > widget.maxDuration) return const SizedBox.shrink();
+              return Positioned(
+                left: sec * pps + 3,
+                top: 1,
+                child: Text(
+                  '${sec.toStringAsFixed(0)}s',
+                  style: TextStyle(color: AppColors.textMuted.withOpacity(0.5), fontSize: 9, fontFamily: 'monospace'),
+                ),
+              );
+            },
+          ),
+
+          // Caption blocks
+          ...widget.captions.map((c) => _buildCaptionBlock(c, pps)),
+
+          // Playhead glow
+          Positioned(
+            left: widget.currentTime * pps - 4,
+            top: 0,
+            bottom: 0,
+            width: 8,
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.playhead.withOpacity(0.0),
+                    AppColors.playhead.withOpacity(0.15),
+                    AppColors.playhead.withOpacity(0.0),
+                  ],
+                ),
               ),
             ),
-          ],
-        ),
-      );
-    }
+          ),
+
+          // Playhead line
+          Positioned(
+            left: widget.currentTime * pps,
+            top: 0,
+            bottom: 0,
+            width: 2,
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColors.playhead,
+                borderRadius: BorderRadius.circular(1),
+                boxShadow: [
+                  BoxShadow(color: AppColors.playhead.withOpacity(0.5), blurRadius: 6),
+                ],
+              ),
+            ),
+          ),
+
+          // Playhead head (triangle)
+          Positioned(
+            left: (widget.currentTime * pps) - 7,
+            top: -2,
+            child: CustomPaint(
+              size: const Size(14, 10),
+              painter: _PlayheadPainter(),
+            ),
+          ),
+
+          // Scrubbing area
+          Positioned(
+            top: 0, left: 0, right: 0, height: 28,
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTapDown: (d) {
+                double newTime = d.localPosition.dx / pps;
+                widget.onTimeChanged(newTime.clamp(0.0, widget.maxDuration));
+              },
+              onHorizontalDragUpdate: (d) {
+                double newTime = d.localPosition.dx / pps;
+                widget.onTimeChanged(newTime.clamp(0.0, widget.maxDuration));
+              },
+              child: Container(color: Colors.transparent),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _buildCaptionBlock(Caption caption, double pps) {
     final double left = caption.startTime * pps;
     final double width = math.max(8.0, (caption.endTime - caption.startTime) * pps);
     final double top = caption.track * trackHeight;
     final bool selected = widget.selectedCaptionId == caption.id;
-    
-    // Generous invisible 24px touch targets for mobile thumbs
+
     const double touchHandleW = 24.0;
-    // High-contrast visual indicator
-    const double visualHandleW = 6.0;
+    const double visualHandleW = 5.0;
 
     return Positioned(
       left: left,
-      top: top + 2,
+      top: top + 3,
       width: width,
-      height: trackHeight - 4,
+      height: trackHeight - 6,
       child: Stack(
-        clipBehavior: Clip.none, // Allow large touch targets to expand outside boundaries
+        clipBehavior: Clip.none,
         children: [
-          // Main block body (draggable)
+          // Main block body
           Positioned.fill(
             child: Listener(
               onPointerDown: (_) => setState(() => _isInteracting = true),
@@ -244,18 +286,31 @@ class _TimelineWidgetState extends State<TimelineWidget> {
                   setState(() { caption.startTime = ns; caption.endTime = ne; });
                   widget.onCaptionChanged();
                 },
-                child: Container(
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 150),
                   decoration: BoxDecoration(
-                    color: selected ? const Color(0xFFFFD700) : const Color(0xFFD4AF37).withOpacity(0.85),
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: selected ? Colors.white : const Color(0xFFFFE066), width: selected ? 2 : 1),
+                    gradient: selected
+                        ? const LinearGradient(colors: [AppColors.accent, AppColors.accentLight])
+                        : LinearGradient(colors: [AppColors.accent.withOpacity(0.7), AppColors.accent.withOpacity(0.5)]),
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(
+                      color: selected ? Colors.white.withOpacity(0.6) : AppColors.accent.withOpacity(0.3),
+                      width: selected ? 1.5 : 1,
+                    ),
+                    boxShadow: selected ? [
+                      BoxShadow(color: AppColors.accent.withOpacity(0.3), blurRadius: 8, spreadRadius: -2),
+                    ] : null,
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   alignment: Alignment.centerLeft,
                   child: Text(
                     caption.text,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(color: Colors.black87, fontSize: 11, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: selected ? Colors.black : Colors.black.withOpacity(0.8),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ),
@@ -264,7 +319,7 @@ class _TimelineWidgetState extends State<TimelineWidget> {
 
           // Left resize handle
           if (selected) Positioned(
-            left: -touchHandleW / 3, // Offset slightly outward to be easily grabbable
+            left: -touchHandleW / 3,
             top: 0, bottom: 0, width: touchHandleW,
             child: Listener(
               onPointerDown: (_) => setState(() => _isInteracting = true),
@@ -283,12 +338,15 @@ class _TimelineWidgetState extends State<TimelineWidget> {
                 child: MouseRegion(
                   cursor: SystemMouseCursors.resizeLeftRight,
                   child: Container(
-                    color: Colors.transparent, // Broad invisible hit target
+                    color: Colors.transparent,
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Container(
-                        width: visualHandleW, 
-                        color: Colors.white.withOpacity(0.6),
+                        width: visualHandleW,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.8),
+                          borderRadius: BorderRadius.circular(3),
+                        ),
                       ),
                     ),
                   ),
@@ -299,7 +357,7 @@ class _TimelineWidgetState extends State<TimelineWidget> {
 
           // Right resize handle
           if (selected) Positioned(
-            right: -touchHandleW / 3, // Offset slightly outward to be easily grabbable
+            right: -touchHandleW / 3,
             top: 0, bottom: 0, width: touchHandleW,
             child: Listener(
               onPointerDown: (_) => setState(() => _isInteracting = true),
@@ -317,12 +375,15 @@ class _TimelineWidgetState extends State<TimelineWidget> {
                 child: MouseRegion(
                   cursor: SystemMouseCursors.resizeLeftRight,
                   child: Container(
-                    color: Colors.transparent, // Broad invisible hit target
+                    color: Colors.transparent,
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Container(
-                        width: visualHandleW, 
-                        color: Colors.white.withOpacity(0.6),
+                        width: visualHandleW,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.8),
+                          borderRadius: BorderRadius.circular(3),
+                        ),
                       ),
                     ),
                   ),
@@ -339,15 +400,24 @@ class _TimelineWidgetState extends State<TimelineWidget> {
 class _PlayheadPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = Colors.redAccent..style = PaintingStyle.fill;
+    final paint = Paint()
+      ..color = AppColors.playhead
+      ..style = PaintingStyle.fill;
     final path = Path()
       ..moveTo(0, 0)
       ..lineTo(size.width, 0)
       ..lineTo(size.width / 2, size.height)
       ..close();
     canvas.drawPath(path, paint);
+
+    // Glow effect
+    final glowPaint = Paint()
+      ..color = AppColors.playhead.withOpacity(0.3)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+    canvas.drawPath(path, glowPaint);
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
+

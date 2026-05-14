@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import '../models/caption_model.dart';
+import '../main.dart';
 
 class InspectorWidget extends StatefulWidget {
   final Caption? selectedCaption;
@@ -104,78 +105,112 @@ class _InspectorWidgetState extends State<InspectorWidget> {
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 800;
 
-    return MediaQuery(
-      data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
-      child: ClipRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
-          child: Container(
-            decoration: const BoxDecoration(
-              color: Color.fromRGBO(15, 15, 15, 0.65),
-              border: Border(left: BorderSide(color: Colors.white12, width: 1)),
-            ),
-            child: Column(
-              children: [
-                // Header + Add/Delete buttons
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  decoration: const BoxDecoration(
-                    border: Border(bottom: BorderSide(color: Colors.white10)),
-                  ),
-                  child: Row(
-                    children: [
-                      const Text('INSPEKTOR', style: TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1.2)),
-                      const Spacer(),
-                      _miniBtn(Icons.add, 'Nový', widget.onAddCaption),
-                      const SizedBox(width: 6),
-                      _miniBtn(Icons.delete_outline, 'Smazat', widget.selectedCaption != null ? widget.onDeleteCaption : null, danger: true),
-                    ],
-                  ),
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 24.0, sigmaY: 24.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.bgPanel.withOpacity(0.85),
+            border: Border(left: BorderSide(color: AppColors.border.withOpacity(0.5), width: 1)),
+          ),
+          child: Column(
+            children: [
+              // Header
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                  border: Border(bottom: BorderSide(color: AppColors.border.withOpacity(0.5))),
                 ),
-
-                // Caption list (ONLY ON DESKTOP, wastes vertical space on mobile)
-                if (!isMobile)
-                  Container(
-                    height: 100,
-                    decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFF222222)))),
-                    child: ListView.builder(
-                      itemCount: widget.allCaptions.length,
-                      itemBuilder: (ctx, i) {
-                        final c = widget.allCaptions[i];
-                        final selected = c.id == widget.selectedCaption?.id;
-                        return InkWell(
-                          onTap: () => widget.onCaptionSelected(c.id),
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                            decoration: BoxDecoration(
-                              color: selected ? const Color(0xFFD4AF37).withOpacity(0.15) : Colors.transparent,
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: selected ? const Color(0xFFD4AF37).withOpacity(0.5) : Colors.transparent),
-                            ),
-                            child: Text(
-                              '${c.text}  (${c.startTime.toStringAsFixed(1)}s)',
-                              style: TextStyle(
-                                color: selected ? const Color(0xFFD4AF37) : Colors.white70,
-                                fontWeight: selected ? FontWeight.bold : FontWeight.normal,
-                                fontSize: 13,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        );
-                      },
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(colors: [AppColors.accent, AppColors.accentLight]),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: const Text('INSPEKTOR', style: TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 1.2)),
                     ),
-                  ),
-
-                // Properties (scrollable)
-                Expanded(
-                  child: widget.selectedCaption == null
-                      ? const Center(child: Text('Vyber titulek pro úpravu', style: TextStyle(color: Colors.white38, fontSize: 14)))
-                      : (isMobile ? _buildMobileProperties(widget.selectedCaption!) : _buildProperties(widget.selectedCaption!)),
+                    const Spacer(),
+                    _actionBtn(Icons.add_rounded, 'Nový', widget.onAddCaption),
+                    const SizedBox(width: 6),
+                    _actionBtn(Icons.delete_outline_rounded, 'Smazat', widget.selectedCaption != null ? widget.onDeleteCaption : null, danger: true),
+                  ],
                 ),
-              ],
-            ),
+              ),
+
+              // Caption list (desktop only)
+              if (!isMobile)
+                Container(
+                  height: 90,
+                  decoration: BoxDecoration(border: Border(bottom: BorderSide(color: AppColors.border.withOpacity(0.3)))),
+                  child: ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    itemCount: widget.allCaptions.length,
+                    itemBuilder: (ctx, i) {
+                      final c = widget.allCaptions[i];
+                      final selected = c.id == widget.selectedCaption?.id;
+                      return InkWell(
+                        onTap: () => widget.onCaptionSelected(c.id),
+                        borderRadius: BorderRadius.circular(8),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 150),
+                          margin: const EdgeInsets.symmetric(vertical: 2),
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: selected ? AppColors.accent.withOpacity(0.12) : Colors.transparent,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: selected ? AppColors.accent.withOpacity(0.4) : Colors.transparent),
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 4, height: 20,
+                                decoration: BoxDecoration(
+                                  color: selected ? AppColors.accent : AppColors.border,
+                                  borderRadius: BorderRadius.circular(2),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  c.text,
+                                  style: TextStyle(
+                                    color: selected ? AppColors.accent : AppColors.textSecondary,
+                                    fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+                                    fontSize: 12,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              Text(
+                                '${c.startTime.toStringAsFixed(1)}s',
+                                style: TextStyle(color: AppColors.textMuted, fontSize: 10, fontFamily: 'monospace'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+              // Properties
+              Expanded(
+                child: widget.selectedCaption == null
+                    ? Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.touch_app_outlined, size: 32, color: AppColors.textMuted),
+                            const SizedBox(height: 12),
+                            Text('Vyber titulek', style: TextStyle(color: AppColors.textMuted, fontSize: 14)),
+                          ],
+                        ),
+                      )
+                    : (isMobile ? _buildMobileProperties(widget.selectedCaption!) : _buildProperties(widget.selectedCaption!)),
+              ),
+            ],
           ),
         ),
       ),
@@ -190,68 +225,67 @@ class _InspectorWidgetState extends State<InspectorWidget> {
       padding: const EdgeInsets.all(16),
       children: [
         // === PRESETS ===
-        _section('MOJE PRESETY (ŠABLONY)'),
+        _section('PRESETY'),
         if (widget.presets.isEmpty)
-          const Padding(
-            padding: EdgeInsets.only(bottom: 12),
-            child: Text('Zatím nemáš žádné uložené šablony.', style: TextStyle(color: Colors.white24, fontSize: 11, fontStyle: FontStyle.italic)),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Text('Zatím nemáš uložené šablony.', style: TextStyle(color: AppColors.textMuted, fontSize: 11, fontStyle: FontStyle.italic)),
           ),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: 6, runSpacing: 6,
           children: [
             ...widget.presets.asMap().entries.map((entry) {
               final i = entry.key;
               final p = entry.value;
               return InkWell(
                 onTap: () => widget.onApplyPreset(p),
+                borderRadius: BorderRadius.circular(8),
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF222222),
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: const Color(0xFFD4AF37).withOpacity(0.3)),
+                    color: AppColors.bgCard,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: AppColors.accent.withOpacity(0.3)),
                   ),
-                  child: Text('Šablona ${i + 1}', style: const TextStyle(color: Colors.white, fontSize: 11)),
+                  child: Text('Šablona ${i + 1}', style: const TextStyle(color: AppColors.textPrimary, fontSize: 11)),
                 ),
               );
             }),
             InkWell(
               onTap: () => widget.onSavePreset(c.style),
+              borderRadius: BorderRadius.circular(8),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1A1A1A),
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: const Color(0xFFD4AF37), style: BorderStyle.solid),
+                  gradient: LinearGradient(colors: [AppColors.accent.withOpacity(0.15), AppColors.accentLight.withOpacity(0.05)]),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: AppColors.accent.withOpacity(0.5)),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.add, size: 12, color: Color(0xFFD4AF37)),
-                    SizedBox(width: 4),
-                    Text('Uložit aktuální styl', style: TextStyle(color: Color(0xFFD4AF37), fontSize: 11, fontWeight: FontWeight.bold)),
+                    Icon(Icons.add_rounded, size: 12, color: AppColors.accent),
+                    const SizedBox(width: 4),
+                    Text('Uložit styl', style: TextStyle(color: AppColors.accent, fontSize: 11, fontWeight: FontWeight.w600)),
                   ],
                 ),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 20),
 
         // === TEXT ===
-        _section('ZÁKLADNÍ VLASTNOSTI'),
-        _label('Text'),
+        _section('TEXT'),
+        _label('Obsah titulku'),
         TextField(
           controller: _textCtrl,
           onChanged: (v) { c.text = v; _update(); },
           maxLines: 2,
-          style: const TextStyle(color: Colors.white, fontSize: 14),
+          style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
           decoration: _inputDeco(),
         ),
         const SizedBox(height: 12),
-
-        // Start / End / Track
         Row(children: [
           Expanded(child: _numField('Začátek', c.startTime, (v) { c.startTime = v; _update(); })),
           const SizedBox(width: 8),
@@ -259,7 +293,6 @@ class _InspectorWidgetState extends State<InspectorWidget> {
           const SizedBox(width: 8),
           Expanded(child: _dropdownField('Stopa', ['0', '1', '2'], c.track.toString(), (v) { c.track = int.parse(v); _update(); })),
         ]),
-
         const SizedBox(height: 20),
 
         // === ANIMATION ===
@@ -276,36 +309,35 @@ class _InspectorWidgetState extends State<InspectorWidget> {
           Expanded(child: _dropdownField('SFX Out', _sfxOptions, _sfxOptions.contains(c.sfxOut) ? c.sfxOut : 'none', (v) { c.sfxOut = v; _update(); })),
         ]),
         _slider('Hlasitost SFX', c.sfxVolume.toDouble(), 0, 100, (v) { c.sfxVolume = v.toInt(); _update(); }, suffix: '${c.sfxVolume}%'),
-
         const SizedBox(height: 20),
 
-        // === FONT & STYLE ===
-        _section('FONT A STYL'),
-        _dropdownField('Font', _fonts, _fonts.contains(s.fontFamily) ? s.fontFamily : 'Inter', (v) { s.fontFamily = v; _update(); }),
+        // === FONT ===
+        _section('FONT'),
+        _dropdownField('Rodina', _fonts, _fonts.contains(s.fontFamily) ? s.fontFamily : 'Inter', (v) { s.fontFamily = v; _update(); }),
         const SizedBox(height: 8),
         _slider('Velikost', s.fontSize.toDouble(), 20, 200, (v) { s.fontSize = v.toInt(); _update(); }, suffix: '${s.fontSize}px'),
-
         const SizedBox(height: 20),
 
-        // === BARVY ===
-        _section('BARVY A PŘECHODY'),
+        // === COLORS ===
+        _section('BARVY'),
         Row(children: [
-          // Solid color picker
           GestureDetector(
             onTap: () => _pickColor(s.colorSolid, (c) { s.colorSolid = _colorToHex(c); _update(); }),
             child: Container(
               width: 44, height: 44,
-              decoration: BoxDecoration(color: _hex(s.colorSolid), borderRadius: BorderRadius.circular(6), border: Border.all(color: const Color(0xFF444444))),
+              decoration: BoxDecoration(
+                color: _hex(s.colorSolid),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: AppColors.border, width: 2),
+                boxShadow: [BoxShadow(color: _hex(s.colorSolid).withOpacity(0.3), blurRadius: 8)],
+              ),
             ),
           ),
           const SizedBox(width: 12),
-          Expanded(
-            child: _toggleRow('Gradient', s.useGradient, (v) { s.useGradient = v; _update(); }, icon: Icons.gradient_rounded),
-          ),
+          Expanded(child: _toggleRow('Gradient', s.useGradient, (v) { s.useGradient = v; _update(); }, icon: Icons.gradient_rounded)),
         ]),
         if (s.useGradient) ...[
           const SizedBox(height: 8),
-          // Gradient Style Selector
           Builder(builder: (context) {
             String currentGradPreset = 'Vlastní úhel';
             if (s.gradientType == 'radial') currentGradPreset = 'Z prostředka (kruhový)';
@@ -331,10 +363,10 @@ class _InspectorWidgetState extends State<InspectorWidget> {
           }),
           const SizedBox(height: 8),
           if (s.gradientType == 'linear') ...[
-            _slider('Úhel otočení', s.gradientAngle, 0, 360, (v) { s.gradientAngle = v; _update(); }, suffix: '${s.gradientAngle.toInt()}°'),
+            _slider('Úhel', s.gradientAngle, 0, 360, (v) { s.gradientAngle = v; _update(); }, suffix: '${s.gradientAngle.toInt()}°'),
             const SizedBox(height: 8),
           ],
-          _slider('Poměr barev (Střed)', s.gradientRatio, 0, 1, (v) { s.gradientRatio = v; _update(); }, suffix: '${(s.gradientRatio * 100).toInt()}%'),
+          _slider('Poměr', s.gradientRatio, 0, 1, (v) { s.gradientRatio = v; _update(); }, suffix: '${(s.gradientRatio * 100).toInt()}%'),
           const SizedBox(height: 8),
           Row(children: [
             _colorBox('Barva 1', s.gradientColors.isNotEmpty ? s.gradientColors[0] : '#FFD700', (c) {
@@ -348,85 +380,90 @@ class _InspectorWidgetState extends State<InspectorWidget> {
             }),
           ]),
         ],
-
         const SizedBox(height: 20),
 
-        // === EFEKTY ===
-        _section('EFEKTY A VRSTVY'),
-        _slider('Krytí (Opacity)', s.opacity, 0.0, 1.0, (v) { s.opacity = v; _update(); }, suffix: '${(s.opacity * 100).toInt()}%'),
+        // === EFFECTS ===
+        _section('EFEKTY'),
+        _slider('Krytí', s.opacity, 0.0, 1.0, (v) { s.opacity = v; _update(); }, suffix: '${(s.opacity * 100).toInt()}%'),
         const SizedBox(height: 8),
-        _dropdownField('Styl prolnutí (Blend)', _blendModes, _blendModes.contains(s.blendMode) ? s.blendMode : 'normal', (v) { s.blendMode = v; _update(); }),
-        const SizedBox(height: 16),
-
-        // Stroke
-        _toggleRow('Obrys (Stroke)', s.strokeEnabled, (v) { s.strokeEnabled = v; _update(); }, icon: Icons.border_style_rounded),
+        _dropdownField('Prolnutí', _blendModes, _blendModes.contains(s.blendMode) ? s.blendMode : 'normal', (v) { s.blendMode = v; _update(); }),
+        const SizedBox(height: 12),
+        _toggleRow('Obrys', s.strokeEnabled, (v) { s.strokeEnabled = v; _update(); }, icon: Icons.border_style_rounded),
         if (s.strokeEnabled) ...[
-          _slider('Šířka obrysu', s.strokeWidth.toDouble(), 0, 20, (v) { s.strokeWidth = v.toInt(); _update(); }, suffix: '${s.strokeWidth}px'),
-          _colorRow('Barva obrysu', s.strokeColor, (c) { s.strokeColor = _colorToHex(c); _update(); }),
+          _slider('Šířka', s.strokeWidth.toDouble(), 0, 20, (v) { s.strokeWidth = v.toInt(); _update(); }, suffix: '${s.strokeWidth}px'),
+          _colorRow('Barva', s.strokeColor, (c) { s.strokeColor = _colorToHex(c); _update(); }),
         ],
         const SizedBox(height: 8),
-
-        // Shadow
-        _toggleRow('Stín (Shadow)', s.shadowEnabled, (v) { s.shadowEnabled = v; _update(); }, icon: Icons.filter_drama_rounded),
+        _toggleRow('Stín', s.shadowEnabled, (v) { s.shadowEnabled = v; _update(); }, icon: Icons.filter_drama_outlined),
         if (s.shadowEnabled) ...[
           _slider('Rozmazání', s.shadowBlur.toDouble(), 0, 50, (v) { s.shadowBlur = v.toInt(); _update(); }, suffix: '${s.shadowBlur}'),
           _slider('Offset Y', s.shadowOffsetY.toDouble(), -30, 30, (v) { s.shadowOffsetY = v.toInt(); _update(); }, suffix: '${s.shadowOffsetY}'),
         ],
         const SizedBox(height: 8),
-
-        // Glow
-        _toggleRow('Záře (Glow)', s.glowEnabled, (v) { s.glowEnabled = v; _update(); }, icon: Icons.wb_sunny_rounded),
+        _toggleRow('Záře', s.glowEnabled, (v) { s.glowEnabled = v; _update(); }, icon: Icons.wb_sunny_outlined),
         if (s.glowEnabled) ...[
           _colorRow('Barva záře', s.glowColor, (c) { s.glowColor = _colorToHex(c); _update(); }),
           _slider('Intenzita', s.glowIntensity, 0.0, 1.0, (v) { s.glowIntensity = v; _update(); }, suffix: '${(s.glowIntensity * 100).toInt()}%'),
         ],
         const SizedBox(height: 8),
-
-        // Behind Person
-        _toggleRow('Za osobou (Mask)', s.behindPerson, (v) { s.behindPerson = v; _update(); }, icon: Icons.person_pin_rounded),
-        if (s.behindPerson) 
-           const Padding(
-             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-             child: Text('Vyžaduje vygenerovanou masku v horním panelu.', style: TextStyle(color: Colors.white24, fontSize: 10, fontStyle: FontStyle.italic)),
-           ),
-
+        _toggleRow('Za osobou', s.behindPerson, (v) { s.behindPerson = v; _update(); }, icon: Icons.person_outline_rounded),
+        if (s.behindPerson)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            child: Text('Vyžaduje vygenerovanou masku.', style: TextStyle(color: AppColors.textMuted, fontSize: 10, fontStyle: FontStyle.italic)),
+          ),
         const SizedBox(height: 20),
 
-        // === POZICE A ROTACE ===
+        // === POSITION ===
         _section('POZICE A ROTACE'),
         Row(children: [
-          Expanded(child: _numField('Pozice X', t.position['x'].toDouble(), (v) { t.position['x'] = v; _update(); })),
+          Expanded(child: _numField('X', t.position['x'].toDouble(), (v) { t.position['x'] = v; _update(); })),
           const SizedBox(width: 6),
-          Expanded(child: _numField('Pozice Y', t.position['y'].toDouble(), (v) { t.position['y'] = v; _update(); })),
+          Expanded(child: _numField('Y', t.position['y'].toDouble(), (v) { t.position['y'] = v; _update(); })),
         ]),
         const SizedBox(height: 12),
-        _slider('Rotace X° (Náklon)', t.rotation['x'].toDouble(), -180, 180, (v) { t.rotation['x'] = v; _update(); }, suffix: '${t.rotation['x'].toInt()}°'),
-        _slider('Rotace Y° (Otočení)', t.rotation['y'].toDouble(), -180, 180, (v) { t.rotation['y'] = v; _update(); }, suffix: '${t.rotation['y'].toInt()}°'),
-        _slider('Rotace Z° (Zkosení)', t.rotation['z'].toDouble(), -180, 180, (v) { t.rotation['z'] = v; _update(); }, suffix: '${t.rotation['z'].toInt()}°'),
-
-
+        _slider('Rot X', t.rotation['x'].toDouble(), -180, 180, (v) { t.rotation['x'] = v; _update(); }, suffix: '${t.rotation['x'].toInt()}°'),
+        _slider('Rot Y', t.rotation['y'].toDouble(), -180, 180, (v) { t.rotation['y'] = v; _update(); }, suffix: '${t.rotation['y'].toInt()}°'),
+        _slider('Rot Z', t.rotation['z'].toDouble(), -180, 180, (v) { t.rotation['z'] = v; _update(); }, suffix: '${t.rotation['z'].toInt()}°'),
         const SizedBox(height: 30),
       ],
     );
   }
 
-  // ─── Helper Widgets ───
+  // ─── Helpers ───
 
   Widget _section(String title) => Padding(
-    padding: const EdgeInsets.only(bottom: 8),
-    child: Text(title, style: const TextStyle(color: Color(0xFFD4AF37), fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1)),
+    padding: const EdgeInsets.only(bottom: 10),
+    child: Row(
+      children: [
+        Container(
+          width: 3, height: 14,
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [AppColors.accent, AppColors.accentLight],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(title, style: const TextStyle(color: AppColors.accent, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1)),
+      ],
+    ),
   );
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: 4),
-    child: Text(text, style: const TextStyle(color: Colors.white54, fontSize: 12)),
+    child: Text(text, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
   );
 
   InputDecoration _inputDeco() => InputDecoration(
-    filled: true, fillColor: Colors.white.withOpacity(0.05),
-    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
-    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
-    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xFFD4AF37), width: 1)),
+    filled: true,
+    fillColor: AppColors.bgCard,
+    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: AppColors.border.withOpacity(0.5))),
+    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: AppColors.accent, width: 1.5)),
     contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
     isDense: true,
   );
@@ -435,14 +472,14 @@ class _InspectorWidgetState extends State<InspectorWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(color: Colors.white54, fontSize: 11)),
+        Text(label, style: const TextStyle(color: AppColors.textMuted, fontSize: 11)),
         const SizedBox(height: 3),
         SizedBox(
           height: 36,
           child: TextField(
             controller: TextEditingController(text: value.toStringAsFixed(value == value.roundToDouble() ? 0 : 1)),
             onSubmitted: (v) { final d = double.tryParse(v); if (d != null) onChanged(d); },
-            style: const TextStyle(color: Colors.white, fontSize: 13, fontFamily: 'monospace'),
+            style: const TextStyle(color: AppColors.textPrimary, fontSize: 13, fontFamily: 'monospace'),
             keyboardType: TextInputType.number,
             decoration: _inputDeco(),
           ),
@@ -455,16 +492,16 @@ class _InspectorWidgetState extends State<InspectorWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(color: Colors.white54, fontSize: 11)),
+        Text(label, style: const TextStyle(color: AppColors.textMuted, fontSize: 11)),
         const SizedBox(height: 3),
         SizedBox(
           height: 36,
           child: DropdownButtonFormField<String>(
             value: items.contains(value) ? value : items.first,
-            dropdownColor: const Color(0xFF1A1A1A),
+            dropdownColor: AppColors.bgElevated,
             isDense: true,
             decoration: _inputDeco(),
-            items: items.map((e) => DropdownMenuItem(value: e, child: Text(e, style: const TextStyle(color: Colors.white, fontSize: 12)))).toList(),
+            items: items.map((e) => DropdownMenuItem(value: e, child: Text(e, style: const TextStyle(color: AppColors.textPrimary, fontSize: 12)))).toList(),
             onChanged: (v) { if (v != null) onChanged(v); },
           ),
         ),
@@ -477,13 +514,13 @@ class _InspectorWidgetState extends State<InspectorWidget> {
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
-          SizedBox(width: 60, child: Text(label, style: const TextStyle(color: Colors.white54, fontSize: 10))),
+          SizedBox(width: 55, child: Text(label, style: const TextStyle(color: AppColors.textMuted, fontSize: 10))),
           Expanded(
             child: SliderTheme(
               data: SliderThemeData(
-                activeTrackColor: const Color(0xFFD4AF37),
-                inactiveTrackColor: const Color(0xFF333333),
-                thumbColor: const Color(0xFFD4AF37),
+                activeTrackColor: AppColors.accent,
+                inactiveTrackColor: AppColors.border,
+                thumbColor: AppColors.accent,
                 thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 7),
                 trackHeight: 3,
                 overlayShape: SliderComponentShape.noOverlay,
@@ -491,7 +528,7 @@ class _InspectorWidgetState extends State<InspectorWidget> {
               child: Slider(value: value.clamp(min, max), min: min, max: max, onChanged: onChanged),
             ),
           ),
-          SizedBox(width: 44, child: Text(suffix, style: const TextStyle(color: Colors.white38, fontSize: 11), textAlign: TextAlign.right)),
+          SizedBox(width: 44, child: Text(suffix, style: const TextStyle(color: AppColors.textMuted, fontSize: 11, fontFamily: 'monospace'), textAlign: TextAlign.right)),
         ],
       ),
     );
@@ -502,14 +539,15 @@ class _InspectorWidgetState extends State<InspectorWidget> {
       onTap: () => onChanged(!value),
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 4),
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          margin: const EdgeInsets.symmetric(vertical: 3),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
-            color: value ? const Color(0xFFD4AF37).withOpacity(0.1) : const Color(0xFF17171E),
-            borderRadius: BorderRadius.circular(8),
+            color: value ? AppColors.accent.withOpacity(0.08) : AppColors.bgCard,
+            borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: value ? const Color(0xFFD4AF37).withOpacity(0.6) : const Color(0xFF2C2C38),
+              color: value ? AppColors.accent.withOpacity(0.4) : AppColors.border.withOpacity(0.5),
               width: 1,
             ),
           ),
@@ -520,24 +558,38 @@ class _InspectorWidgetState extends State<InspectorWidget> {
                 Icon(
                   icon ?? (value ? Icons.check_circle_rounded : Icons.circle_outlined),
                   size: 16,
-                  color: value ? const Color(0xFFD4AF37) : Colors.white24,
+                  color: value ? AppColors.accent : AppColors.textMuted,
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  label, 
+                  label,
                   style: TextStyle(
-                    color: value ? Colors.white : Colors.white60, 
-                    fontSize: 12, 
-                    fontWeight: value ? FontWeight.w600 : FontWeight.normal
-                  )
+                    color: value ? AppColors.textPrimary : AppColors.textSecondary,
+                    fontSize: 12,
+                    fontWeight: value ? FontWeight.w600 : FontWeight.normal,
+                  ),
                 ),
               ]),
-              Container(
-                width: 12, height: 12,
+              // Toggle indicator
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: 32, height: 18,
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: value ? const Color(0xFFD4AF37) : Colors.transparent,
-                  border: Border.all(color: value ? Colors.transparent : Colors.white24, width: 1.5),
+                  color: value ? AppColors.accent : AppColors.bgElevated,
+                  borderRadius: BorderRadius.circular(9),
+                  border: Border.all(color: value ? AppColors.accent : AppColors.border),
+                ),
+                child: AnimatedAlign(
+                  duration: const Duration(milliseconds: 200),
+                  alignment: value ? Alignment.centerRight : Alignment.centerLeft,
+                  child: Container(
+                    width: 14, height: 14,
+                    margin: const EdgeInsets.symmetric(horizontal: 1),
+                    decoration: BoxDecoration(
+                      color: value ? Colors.black : AppColors.textMuted,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -552,13 +604,21 @@ class _InspectorWidgetState extends State<InspectorWidget> {
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
-          SizedBox(width: 80, child: Text(label, style: const TextStyle(color: Colors.white54, fontSize: 11))),
+          SizedBox(width: 75, child: Text(label, style: const TextStyle(color: AppColors.textMuted, fontSize: 11))),
           GestureDetector(
             onTap: () => _pickColor(hex, onPicked),
-            child: Container(width: 30, height: 30, decoration: BoxDecoration(color: _hex(hex), borderRadius: BorderRadius.circular(4), border: Border.all(color: const Color(0xFF444444)))),
+            child: Container(
+              width: 30, height: 30,
+              decoration: BoxDecoration(
+                color: _hex(hex),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: AppColors.border),
+                boxShadow: [BoxShadow(color: _hex(hex).withOpacity(0.25), blurRadius: 6)],
+              ),
+            ),
           ),
           const SizedBox(width: 8),
-          Text(hex, style: const TextStyle(color: Colors.white38, fontSize: 11, fontFamily: 'monospace')),
+          Text(hex, style: const TextStyle(color: AppColors.textMuted, fontSize: 11, fontFamily: 'monospace')),
         ],
       ),
     );
@@ -570,34 +630,43 @@ class _InspectorWidgetState extends State<InspectorWidget> {
         onTap: () => _pickColor(hex, onPicked),
         child: Column(
           children: [
-            Text(label, style: const TextStyle(color: Colors.white54, fontSize: 11)),
+            Text(label, style: const TextStyle(color: AppColors.textMuted, fontSize: 11)),
             const SizedBox(height: 4),
-            Container(height: 32, decoration: BoxDecoration(color: _hex(hex), borderRadius: BorderRadius.circular(6), border: Border.all(color: const Color(0xFF444444)))),
+            Container(
+              height: 32,
+              decoration: BoxDecoration(
+                color: _hex(hex),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: AppColors.border),
+                boxShadow: [BoxShadow(color: _hex(hex).withOpacity(0.2), blurRadius: 6)],
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _miniBtn(IconData icon, String tip, VoidCallback? onTap, {bool danger = false}) {
+  Widget _actionBtn(IconData icon, String tip, VoidCallback? onTap, {bool danger = false}) {
     return Tooltip(
       message: tip,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(4),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        borderRadius: BorderRadius.circular(8),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
           decoration: BoxDecoration(
-            color: onTap == null ? Colors.transparent : Colors.white.withOpacity(0.05),
-            borderRadius: BorderRadius.circular(6),
-            border: Border.all(color: danger ? const Color(0xFF662222) : Colors.white12),
+            color: onTap == null ? Colors.transparent : AppColors.bgCard,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: danger ? AppColors.danger.withOpacity(0.3) : AppColors.border.withOpacity(0.5)),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(icon, size: 14, color: onTap == null ? Colors.white24 : (danger ? const Color(0xFFFF4444) : const Color(0xFFD4AF37))),
+              Icon(icon, size: 14, color: onTap == null ? AppColors.textMuted : (danger ? AppColors.danger : AppColors.accent)),
               const SizedBox(width: 4),
-              Text(tip, style: TextStyle(fontSize: 11, color: onTap == null ? Colors.white24 : Colors.white70)),
+              Text(tip, style: TextStyle(fontSize: 11, color: onTap == null ? AppColors.textMuted : AppColors.textSecondary)),
             ],
           ),
         ),
@@ -610,10 +679,10 @@ class _InspectorWidgetState extends State<InspectorWidget> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFF16161C),
+        backgroundColor: AppColors.bgCard,
         titlePadding: const EdgeInsets.all(0),
         contentPadding: const EdgeInsets.all(0),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
         content: StatefulBuilder(
           builder: (dialogCtx, setDialogState) {
             return SingleChildScrollView(
@@ -621,28 +690,24 @@ class _InspectorWidgetState extends State<InspectorWidget> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    decoration: const BoxDecoration(
-                      border: Border(bottom: BorderSide(color: Colors.white10, width: 1)),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    decoration: BoxDecoration(
+                      border: Border(bottom: BorderSide(color: AppColors.border.withOpacity(0.5))),
                     ),
-                    child: const Center(child: Text('Kolo barev', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16))),
+                    child: const Center(child: Text('Vybrat barvu', style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600, fontSize: 15))),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: ColorPicker(
                       pickerColor: activeColor,
-                      onColorChanged: (c) {
-                        setDialogState(() {
-                          activeColor = c;
-                        });
-                      },
+                      onColorChanged: (c) { setDialogState(() { activeColor = c; }); },
                       colorPickerWidth: 280,
                       pickerAreaHeightPercent: 0.7,
                       enableAlpha: false,
                       displayThumbColor: true,
                       paletteType: PaletteType.hsvWithHue,
                       labelTypes: const [],
-                      pickerAreaBorderRadius: const BorderRadius.all(Radius.circular(12)),
+                      pickerAreaBorderRadius: const BorderRadius.all(Radius.circular(14)),
                     ),
                   ),
                   Padding(
@@ -651,21 +716,19 @@ class _InspectorWidgetState extends State<InspectorWidget> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         TextButton(
-                          onPressed: () => Navigator.pop(ctx), 
-                          child: const Text('Zrušit', style: TextStyle(color: Colors.white54))
+                          onPressed: () => Navigator.pop(ctx),
+                          child: Text('Zrušit', style: TextStyle(color: AppColors.textMuted)),
                         ),
                         const SizedBox(width: 12),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFD4AF37),
+                            backgroundColor: AppColors.accent,
                             foregroundColor: Colors.black,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                           ),
-                          onPressed: () { 
-                            onPicked(activeColor); 
-                            Navigator.pop(ctx); 
-                          }, 
-                          child: const Text('Použít', style: TextStyle(fontWeight: FontWeight.bold))
+                          onPressed: () { onPicked(activeColor); Navigator.pop(ctx); },
+                          child: const Text('Použít', style: TextStyle(fontWeight: FontWeight.w700)),
                         ),
                       ],
                     ),
@@ -673,7 +736,7 @@ class _InspectorWidgetState extends State<InspectorWidget> {
                 ],
               ),
             );
-          }
+          },
         ),
       ),
     );
@@ -687,17 +750,17 @@ class _InspectorWidgetState extends State<InspectorWidget> {
       length: 4,
       child: Column(
         children: [
-          const TabBar(
-            labelColor: Color(0xFFD4AF37),
-            unselectedLabelColor: Colors.white38,
-            indicatorColor: Color(0xFFD4AF37),
-            labelPadding: EdgeInsets.zero,
+          TabBar(
+            labelColor: AppColors.accent,
+            unselectedLabelColor: AppColors.textMuted,
+            indicatorColor: AppColors.accent,
             indicatorWeight: 2,
-            tabs: [
-              Tab(icon: Icon(Icons.text_fields, size: 20), child: Text('Text', style: TextStyle(fontSize: 10))),
-              Tab(icon: Icon(Icons.brush, size: 20), child: Text('Styl', style: TextStyle(fontSize: 10))),
-              Tab(icon: Icon(Icons.auto_fix_high, size: 20), child: Text('Efekty', style: TextStyle(fontSize: 10))),
-              Tab(icon: Icon(Icons.open_with, size: 20), child: Text('Pozice', style: TextStyle(fontSize: 10))),
+            labelPadding: EdgeInsets.zero,
+            tabs: const [
+              Tab(icon: Icon(Icons.text_fields_outlined, size: 18), child: Text('Text', style: TextStyle(fontSize: 9))),
+              Tab(icon: Icon(Icons.brush_outlined, size: 18), child: Text('Styl', style: TextStyle(fontSize: 9))),
+              Tab(icon: Icon(Icons.auto_fix_high_outlined, size: 18), child: Text('Efekty', style: TextStyle(fontSize: 9))),
+              Tab(icon: Icon(Icons.open_with_outlined, size: 18), child: Text('Pozice', style: TextStyle(fontSize: 9))),
             ],
           ),
           Expanded(
@@ -707,8 +770,8 @@ class _InspectorWidgetState extends State<InspectorWidget> {
                 ListView(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
                   children: [
-                    _section('MOJE PRESETY'),
-                    if (widget.presets.isEmpty) const Padding(padding: EdgeInsets.only(bottom:8), child: Text('Zatím žádné šablony.', style: TextStyle(color: Colors.white24, fontSize: 10))),
+                    _section('PRESETY'),
+                    if (widget.presets.isEmpty) Padding(padding: const EdgeInsets.only(bottom: 8), child: Text('Zatím žádné šablony.', style: TextStyle(color: AppColors.textMuted, fontSize: 10))),
                     Wrap(
                       spacing: 6, runSpacing: 6,
                       children: [
@@ -716,16 +779,16 @@ class _InspectorWidgetState extends State<InspectorWidget> {
                           onTap: () => widget.onApplyPreset(entry.value),
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                            decoration: BoxDecoration(color: const Color(0xFF222222), borderRadius: BorderRadius.circular(4), border: Border.all(color: const Color(0xFFD4AF37).withOpacity(0.3))),
-                            child: Text('Šab. ${entry.key + 1}', style: const TextStyle(color: Colors.white, fontSize: 10)),
+                            decoration: BoxDecoration(color: AppColors.bgCard, borderRadius: BorderRadius.circular(6), border: Border.all(color: AppColors.accent.withOpacity(0.3))),
+                            child: Text('Šab. ${entry.key + 1}', style: const TextStyle(color: AppColors.textPrimary, fontSize: 10)),
                           ),
                         )),
                         InkWell(
                           onTap: () => widget.onSavePreset(c.style),
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                            decoration: BoxDecoration(color: const Color(0xFF1A1A1A), borderRadius: BorderRadius.circular(4), border: Border.all(color: const Color(0xFFD4AF37))),
-                            child: const Row(mainAxisSize: MainAxisSize.min, children: [Icon(Icons.add, size: 12, color: Color(0xFFD4AF37)), SizedBox(width:2), Text('Uložit', style: TextStyle(color: Color(0xFFD4AF37), fontSize: 10, fontWeight: FontWeight.bold))]),
+                            decoration: BoxDecoration(color: AppColors.bgCard, borderRadius: BorderRadius.circular(6), border: Border.all(color: AppColors.accent)),
+                            child: Row(mainAxisSize: MainAxisSize.min, children: [Icon(Icons.add_rounded, size: 12, color: AppColors.accent), const SizedBox(width: 2), Text('Uložit', style: TextStyle(color: AppColors.accent, fontSize: 10, fontWeight: FontWeight.w600))]),
                           ),
                         ),
                       ],
@@ -736,7 +799,7 @@ class _InspectorWidgetState extends State<InspectorWidget> {
                       controller: _textCtrl,
                       onChanged: (v) { c.text = v; _update(); },
                       maxLines: 2,
-                      style: const TextStyle(color: Colors.white, fontSize: 13),
+                      style: const TextStyle(color: AppColors.textPrimary, fontSize: 13),
                       decoration: _inputDeco().copyWith(contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8)),
                     ),
                     const SizedBox(height: 10),
@@ -753,7 +816,7 @@ class _InspectorWidgetState extends State<InspectorWidget> {
                 ListView(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
                   children: [
-                    _section('FONT A VELIKOST'),
+                    _section('FONT'),
                     _dropdownField('Font', _fonts, _fonts.contains(s.fontFamily) ? s.fontFamily : 'Inter', (v) { s.fontFamily = v; _update(); }),
                     _slider('Velikost', s.fontSize.toDouble(), 20, 200, (v) { s.fontSize = v.toInt(); _update(); }, suffix: '${s.fontSize}px'),
                     const SizedBox(height: 12),
@@ -761,7 +824,7 @@ class _InspectorWidgetState extends State<InspectorWidget> {
                     Row(children: [
                       GestureDetector(
                         onTap: () => _pickColor(s.colorSolid, (col) { s.colorSolid = _colorToHex(col); _update(); }),
-                        child: Container(width: 36, height: 36, decoration: BoxDecoration(color: _hex(s.colorSolid), borderRadius: BorderRadius.circular(6), border: Border.all(color: Colors.grey))),
+                        child: Container(width: 36, height: 36, decoration: BoxDecoration(color: _hex(s.colorSolid), borderRadius: BorderRadius.circular(8), border: Border.all(color: AppColors.border))),
                       ),
                       const SizedBox(width: 12),
                       Expanded(child: _toggleRow('Gradient', s.useGradient, (v) { s.useGradient = v; _update(); }, icon: Icons.gradient_rounded)),
@@ -776,8 +839,7 @@ class _InspectorWidgetState extends State<InspectorWidget> {
                         else if (s.gradientAngle == 0) currentGradPreset = 'Vodorovně';
                         else if (s.gradientAngle == 45) currentGradPreset = 'Z rohu (diagonálně)';
                         
-                        return _dropdownField(
-                          'Styl', 
+                        return _dropdownField('Styl', 
                           ['Na stojato (svisle)', 'Vodorovně', 'Z rohu (diagonálně)', 'Z prostředka (kruhový)', 'Vějířový', 'Vlastní úhel'],
                           currentGradPreset,
                           (v) {
@@ -798,14 +860,14 @@ class _InspectorWidgetState extends State<InspectorWidget> {
                       const SizedBox(height: 6),
                       _slider('Poměr', s.gradientRatio, 0, 1, (v) { s.gradientRatio = v; _update(); }),
                       Row(children: [
-                        Expanded(child: _colorBox('B1', s.gradientColors.isNotEmpty ? s.gradientColors[0] : '#FFD700', (col) { 
-                          s.gradientColors = List<String>.from(s.gradientColors.isEmpty ? ['#FFD700','#D4AF37'] : s.gradientColors);
-                          s.gradientColors[0]=_colorToHex(col); _update(); 
+                        Expanded(child: _colorBox('B1', s.gradientColors.isNotEmpty ? s.gradientColors[0] : '#FFD700', (col) {
+                          s.gradientColors = List<String>.from(s.gradientColors.isEmpty ? ['#FFD700', '#D4AF37'] : s.gradientColors);
+                          s.gradientColors[0] = _colorToHex(col); _update();
                         })),
                         const SizedBox(width: 8),
-                        Expanded(child: _colorBox('B2', s.gradientColors.length > 1 ? s.gradientColors[1] : '#D4AF37', (col) { 
-                          s.gradientColors = List<String>.from(s.gradientColors.length < 2 ? ['#FFD700','#D4AF37'] : s.gradientColors); 
-                          s.gradientColors[1]=_colorToHex(col); _update(); 
+                        Expanded(child: _colorBox('B2', s.gradientColors.length > 1 ? s.gradientColors[1] : '#D4AF37', (col) {
+                          s.gradientColors = List<String>.from(s.gradientColors.length < 2 ? ['#FFD700', '#D4AF37'] : s.gradientColors);
+                          s.gradientColors[1] = _colorToHex(col); _update();
                         })),
                       ]),
                     ],
@@ -818,16 +880,16 @@ class _InspectorWidgetState extends State<InspectorWidget> {
                     ]),
                   ],
                 ),
-                // TAB 3: EFFECTS & MASK
+                // TAB 3: EFFECTS
                 ListView(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
                   children: [
-                    _section('VRSTVENÍ A KRYTÍ'),
+                    _section('VRSTVENÍ'),
                     _slider('Krytí', s.opacity, 0, 1, (v) { s.opacity = v; _update(); }),
                     const SizedBox(height: 4),
-                    _dropdownField('Styl', _blendModes, _blendModes.contains(s.blendMode) ? s.blendMode : 'normal', (v) { s.blendMode = v; _update(); }),
+                    _dropdownField('Prolnutí', _blendModes, _blendModes.contains(s.blendMode) ? s.blendMode : 'normal', (v) { s.blendMode = v; _update(); }),
                     const SizedBox(height: 12),
-                    _toggleRow('Skrýt za osobu', s.behindPerson, (v) { s.behindPerson = v; _update(); }, icon: Icons.person_pin_rounded),
+                    _toggleRow('Za osobou', s.behindPerson, (v) { s.behindPerson = v; _update(); }, icon: Icons.person_outline_rounded),
                     const SizedBox(height: 12),
                     _section('OBRYS A STÍN'),
                     _toggleRow('Obrys', s.strokeEnabled, (v) { s.strokeEnabled = v; _update(); }, icon: Icons.border_style_rounded),
@@ -836,20 +898,20 @@ class _InspectorWidgetState extends State<InspectorWidget> {
                       _colorRow('Barva', s.strokeColor, (col) { s.strokeColor = _colorToHex(col); _update(); }),
                     ],
                     const SizedBox(height: 8),
-                    _toggleRow('Stín', s.shadowEnabled, (v) { s.shadowEnabled = v; _update(); }, icon: Icons.filter_drama_rounded),
+                    _toggleRow('Stín', s.shadowEnabled, (v) { s.shadowEnabled = v; _update(); }, icon: Icons.filter_drama_outlined),
                     if (s.shadowEnabled) ...[
                       _slider('Rozmaz', s.shadowBlur.toDouble(), 0, 50, (v) { s.shadowBlur = v.toInt(); _update(); }),
                       _slider('Y-Pos', s.shadowOffsetY.toDouble(), -30, 30, (v) { s.shadowOffsetY = v.toInt(); _update(); }),
                     ],
                     const SizedBox(height: 8),
-                    _toggleRow('Záře', s.glowEnabled, (v) { s.glowEnabled = v; _update(); }, icon: Icons.wb_sunny_rounded),
+                    _toggleRow('Záře', s.glowEnabled, (v) { s.glowEnabled = v; _update(); }, icon: Icons.wb_sunny_outlined),
                     if (s.glowEnabled) ...[
                       _colorRow('Záře', s.glowColor, (col) { s.glowColor = _colorToHex(col); _update(); }),
                       _slider('Intenz', s.glowIntensity, 0, 1, (v) { s.glowIntensity = v; _update(); }),
                     ],
                   ],
                 ),
-                // TAB 4: 3D POS & TRANSFORMS
+                // TAB 4: POSITION
                 ListView(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
                   children: [
@@ -874,60 +936,3 @@ class _InspectorWidgetState extends State<InspectorWidget> {
   }
 }
 
-/// Simple color grid picker
-class _SimpleColorGrid extends StatefulWidget {
-  final Color initialColor;
-  final ValueChanged<Color> onColorChanged;
-  const _SimpleColorGrid({required this.initialColor, required this.onColorChanged});
-
-  @override
-  State<_SimpleColorGrid> createState() => _SimpleColorGridState();
-}
-
-class _SimpleColorGridState extends State<_SimpleColorGrid> {
-  late Color _selected;
-
-  static final _colors = [
-    '#FFFFFF', '#CCCCCC', '#999999', '#666666', '#333333', '#000000',
-    '#FF0000', '#FF4444', '#FF6666', '#CC0000', '#990000', '#660000',
-    '#FF8800', '#FFAA33', '#FFCC66', '#CC6600', '#994400', '#662200',
-    '#FFFF00', '#FFFF44', '#FFFF88', '#CCCC00', '#999900', '#666600',
-    '#00FF00', '#44FF44', '#88FF88', '#00CC00', '#009900', '#006600',
-    '#00FFFF', '#44FFFF', '#88FFFF', '#00CCCC', '#009999', '#006666',
-    '#0000FF', '#4444FF', '#6666FF', '#0000CC', '#000099', '#000066',
-    '#FF00FF', '#FF44FF', '#FF88FF', '#CC00CC', '#990099', '#660066',
-    '#FFD700', '#D4AF37', '#AA771C', '#FFE066', '#B8860B', '#8B6914',
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    _selected = widget.initialColor;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 6, crossAxisSpacing: 4, mainAxisSpacing: 4),
-      itemCount: _colors.length,
-      itemBuilder: (ctx, i) {
-        final hex = _colors[i];
-        final c = Color(int.parse('FF${hex.replaceAll("#", "")}', radix: 16));
-        final isSel = c.value == _selected.value;
-        return GestureDetector(
-          onTap: () {
-            setState(() => _selected = c);
-            widget.onColorChanged(c);
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: c,
-              borderRadius: BorderRadius.circular(4),
-              border: Border.all(color: isSel ? Colors.white : Colors.transparent, width: isSel ? 3 : 1),
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
