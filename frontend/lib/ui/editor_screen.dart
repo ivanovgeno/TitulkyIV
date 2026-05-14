@@ -306,6 +306,8 @@ class _EditorScreenState extends State<EditorScreen> with TickerProviderStateMix
             const SizedBox(width: 4),
             _chipBtn(Icons.person_outline, 'Maska', _generateMask, loading: _isMasking),
             if (_maskPath != null) ...[const SizedBox(width: 4), _chipBtn(Icons.layers_clear_outlined, 'X', () => setState(() { _maskPath = null; _maskPlayer.pause(); }), color: AppColors.danger)],
+          ] else ...[
+            _chipBtn(Icons.movie_outlined, 'Nahrát video', _openVideoFile),
           ],
           const Spacer(),
           Text("${_currentTime.toStringAsFixed(1)}s", style: const TextStyle(color: AppColors.textMuted, fontSize: 11, fontFamily: 'monospace')),
@@ -366,7 +368,10 @@ class _EditorScreenState extends State<EditorScreen> with TickerProviderStateMix
 
   Widget _videoPreview() {
     return Center(child: GestureDetector(
-      onTap: () { if (_videoPath != null && !_isMobile) _togglePlay(); },
+      onTap: () {
+        if (_videoPath == null) { _openVideoFile(); return; }
+        if (!_isMobile) _togglePlay();
+      },
       child: AspectRatio(
         aspectRatio: project!.resolution.width / project!.resolution.height,
         child: Container(
@@ -460,4 +465,6 @@ class _EditorScreenState extends State<EditorScreen> with TickerProviderStateMix
     super.dispose();
   }
 }
+
+
 
