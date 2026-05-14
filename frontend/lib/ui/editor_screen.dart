@@ -163,10 +163,32 @@ class _EditorScreenState extends State<EditorScreen> with TickerProviderStateMix
     } catch (e) { _snack('Chyba: $e'); } finally { if (mounted) setState(() => _isMasking = false); }
   }
 
-  void _togglePlay() => _player.playOrPause();
+  void _togglePlay() {
+    if (_videoPath != null) {
+      _player.playOrPause();
+    } else {
+      // No video: simulate playback with timer for caption preview
+      setState(() => _isPlaying = !_isPlaying);
+      if (_isPlaying) {
+        _syncTimer?.cancel();
+        _syncTimer = Timer.periodic(const Duration(milliseconds: 33), (_) {
+          if (!mounted || !_isPlaying) { _syncTimer?.cancel(); return; }
+          setState(() {
+            _currentTime += 0.033;
+            if (_currentTime > _videoDuration) _currentTime = 0;
+          });
+        });
+      } else {
+        _syncTimer?.cancel();
+      }
+    }
+  }
   void _seekTo(double t) {
-    final p = Duration(milliseconds: (t * 1000).toInt());
-    _player.seek(p); _maskPlayer.seek(p);
+    setState(() => _currentTime = t.clamp(0, _videoDuration));
+    if (_videoPath != null) {
+      final p = Duration(milliseconds: (t * 1000).toInt());
+      _player.seek(p); _maskPlayer.seek(p);
+    }
     if (kIsWeb && _mobileCanvasRegistered) _callMaskCanvasJS('seek', [t.toJS]);
   }
 
@@ -465,6 +487,7 @@ class _EditorScreenState extends State<EditorScreen> with TickerProviderStateMix
     super.dispose();
   }
 }
+
 
 
 

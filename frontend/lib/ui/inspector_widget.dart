@@ -78,9 +78,44 @@ class _InspectorWidgetState extends State<InspectorWidget> {
               ));
             }),
           ),
+          // Caption list (mobile) - always visible as horizontal chips
+          if (_mob && widget.allCaptions.isNotEmpty) Container(
+            height: 40,
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            decoration: BoxDecoration(border: Border(bottom: BorderSide(color: AppColors.border.withOpacity(0.2)))),
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              itemCount: widget.allCaptions.length,
+              itemBuilder: (_, i) {
+                final c = widget.allCaptions[i];
+                final sel = c.id == widget.selectedCaption?.id;
+                return Padding(
+                  padding: const EdgeInsets.only(right: 6),
+                  child: GestureDetector(
+                    onTap: () => widget.onCaptionSelected(c.id),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: sel ? AppColors.accent.withOpacity(0.15) : AppColors.bgCard,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: sel ? AppColors.accent.withOpacity(0.5) : AppColors.border.withOpacity(0.3)),
+                      ),
+                      child: Row(mainAxisSize: MainAxisSize.min, children: [
+                        if (sel) Padding(padding: const EdgeInsets.only(right: 4), child: Container(width: 6, height: 6, decoration: BoxDecoration(color: AppColors.accent, shape: BoxShape.circle))),
+                        Text(c.text, style: TextStyle(color: sel ? AppColors.accent : AppColors.textSecondary, fontSize: 11, fontWeight: sel ? FontWeight.w600 : FontWeight.normal)),
+                        const SizedBox(width: 4),
+                        Text('\${c.startTime.toStringAsFixed(1)}s', style: TextStyle(color: AppColors.textMuted.withOpacity(0.5), fontSize: 9, fontFamily: 'monospace')),
+                      ]),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
           // Body
           Expanded(child: widget.selectedCaption == null
-              ? Center(child: Column(mainAxisSize: MainAxisSize.min, children: [Icon(Icons.touch_app_outlined, size: 28, color: AppColors.textMuted.withOpacity(0.3)), const SizedBox(height: 8), Text('Vyber titulek', style: TextStyle(color: AppColors.textMuted.withOpacity(0.5), fontSize: 13))]))
+              ? Center(child: Column(mainAxisSize: MainAxisSize.min, children: [Icon(Icons.touch_app_outlined, size: 28, color: AppColors.textMuted.withOpacity(0.3)), const SizedBox(height: 8), Text(_mob && widget.allCaptions.isNotEmpty ? 'Vyber titulek nahoře' : 'Přidej titulek (+)', style: TextStyle(color: AppColors.textMuted.withOpacity(0.5), fontSize: 13))]))
               : (_mob ? _mobileProp(widget.selectedCaption!) : _desktopProp(widget.selectedCaption!))),
         ]),
       ),
@@ -263,4 +298,5 @@ class _InspectorWidgetState extends State<InspectorWidget> {
     ]))));
   }
 }
+
 
