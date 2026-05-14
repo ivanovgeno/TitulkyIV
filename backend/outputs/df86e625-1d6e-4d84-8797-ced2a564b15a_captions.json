@@ -1,0 +1,270 @@
+{
+  "project_id": "temp_project",
+  "language": "cs",
+  "resolution": {
+    "width": 1080,
+    "height": 1920
+  },
+  "captions": [
+    {
+      "id": "word_0000",
+      "text": "Genoušku",
+      "start_time": 0.0,
+      "end_time": 0.56,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0001",
+      "text": "taky",
+      "start_time": 0.56,
+      "end_time": 1.04,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0002",
+      "text": "umím",
+      "start_time": 1.04,
+      "end_time": 1.28,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0003",
+      "text": "říkat",
+      "start_time": 1.28,
+      "end_time": 1.62,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0004",
+      "text": "promiň.",
+      "start_time": 1.62,
+      "end_time": 2.38,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    }
+  ]
+}

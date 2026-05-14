@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>IvCaptions - Headless Renderer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        /* Transparent body is required for alpha channel video */
+        body { background: transparent; overflow: hidden; width: 100vw; height: 100vh; }
+        
+        #captionsContainer { position: absolute; top: 0; left: 0; right: 0; bottom: 0; transform-style: preserve-3d; perspective: 800px; }
+
+        .caption {
+            position: absolute; top: 50%; left: 50%; text-align: center; font-weight: 900; opacity: 0; width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="captionsContainer"></div>
+
+    <script>
+        let projectData = null;
+        let currentTime = 0;
+        const container = document.getElementById('captionsContainer');
+
+        function parseColor(colorObj) {
+            if (typeof colorObj === 'string') return colorObj;
+            if (colorObj && colorObj.type === 'gradient' && colorObj.colors) {
+                return `-webkit-linear-gradient(top, ${colorObj.colors.join(', ')})`;
+            }
+            return '#FFFFFF';
+        }
+
+        let currentLayerFilter = 'all'; // 'all', 'behind', 'front'
+
+        // Called by Python/Playwright to inject the JSON data
+        window.loadProject = function(data) {
+            projectData = data;
+            renderCaptions();
+        };
+
+        window.setLayerFilter = function(filter) {
+            currentLayerFilter = filter;
+            renderCaptions();
+        };
+
+        function renderCaptions() {
+            if (!projectData) return;
+            container.innerHTML = '';
+            
+            // For headless, the window viewport matches the video resolution
+            const scale = 1.0; 
+
+            projectData.captions.forEach(c => {
+                // Apply layer filter
+                if (currentLayerFilter === 'behind' && !c.style.behind_person) return;
+                if (currentLayerFilter === 'front' && c.style.behind_person) return;
+
+                const el = document.createElement('div');
+                el.className = 'caption';
+                el.id = c.id;
+                el.textContent = c.text;
+
+                el.style.fontFamily = c.style.font_family || 'Inter';
+                el.style.fontWeight = c.style.font_weight || '900';
+                el.style.fontSize = (c.style.font_size * scale) + 'px';
+                
+                if (typeof c.style.color === 'object') {
+                    el.style.background = parseColor(c.style.color);
+                    el.style.webkitBackgroundClip = 'text';
+                    el.style.webkitTextFillColor = 'transparent';
+                } else {
+                    el.style.color = c.style.color || '#FFF';
+                }
+
+                let filterStr = '';
+                if (c.style.shadow) filterStr += `drop-shadow(${c.style.shadow.offset_x}px ${c.style.shadow.offset_y}px ${c.style.shadow.blur}px ${c.style.shadow.color}) `;
+                if (c.style.glow) filterStr += `drop-shadow(0px 0px 20px ${c.style.glow.color})`;
+                el.style.filter = filterStr;
+
+                const t = c.transform_3d;
+                if (t) {
+                    const tx = t.position.x * scale;
+                    const ty = t.position.y * scale;
+                    const tz = t.position.z || 0;
+                    const rx = t.rotation.x || 0;
+                    const ry = t.rotation.y || 0;
+                    const rz = t.rotation.z || 0;
+                    el.style.transform = `translate(-50%, -50%) translate3d(${tx}px, ${ty}px, ${tz}px) rotateX(${rx}deg) rotateY(${ry}deg) rotateZ(${rz}deg)`;
+                }
+
+                container.appendChild(el);
+            });
+            window.seekTo(0);
+        };
+
+        // Called by Python/Playwright frame-by-frame loop
+        window.seekTo = function(timeSeconds) {
+            currentTime = timeSeconds;
+            if (!projectData) return;
+            projectData.captions.forEach(c => {
+                const el = document.getElementById(c.id);
+                if (el) {
+                    if (currentTime >= c.start_time && currentTime <= c.end_time) {
+                        el.style.opacity = 1;
+                    } else {
+                        el.style.opacity = 0;
+                    }
+                }
+            });
+        };
+    </script>
+</body>
+</html>

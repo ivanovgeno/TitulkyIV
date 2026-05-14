@@ -1,0 +1,29 @@
+name: iv_captions_frontend
+description: "A professional-grade cross-platform automated captioning application."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  http: ^1.2.0
+  google_fonts: ^6.1.0
+  media_kit: ^1.1.11
+  media_kit_video: ^1.2.5
+  media_kit_libs_windows_video: ^1.0.10
+  file_picker: ^8.0.0
+  universal_io: ^2.3.1
+  universal_html: ^2.3.0
+  flutter_colorpicker: ^1.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true

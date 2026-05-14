@@ -1,0 +1,4846 @@
+{
+  "project_id": "temp_project",
+  "language": "cs",
+  "resolution": {
+    "width": 1080,
+    "height": 1920
+  },
+  "captions": [
+    {
+      "id": "word_0000",
+      "text": "Vždycky",
+      "start_time": 0.0,
+      "end_time": 0.38,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0001",
+      "text": "se",
+      "start_time": 0.38,
+      "end_time": 0.48,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0002",
+      "text": "snaží",
+      "start_time": 0.48,
+      "end_time": 0.76,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0003",
+      "text": "být",
+      "start_time": 0.76,
+      "end_time": 0.94,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0004",
+      "text": "vycentrovaný.",
+      "start_time": 0.94,
+      "end_time": 1.66,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0005",
+      "text": "Tady",
+      "start_time": 2.06,
+      "end_time": 2.58,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0006",
+      "text": "máš",
+      "start_time": 2.58,
+      "end_time": 2.94,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0007",
+      "text": "místo",
+      "start_time": 2.94,
+      "end_time": 3.22,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0008",
+      "text": "pro",
+      "start_time": 3.22,
+      "end_time": 3.38,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0009",
+      "text": "titulek,",
+      "start_time": 3.38,
+      "end_time": 3.92,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0010",
+      "text": "tady",
+      "start_time": 3.94,
+      "end_time": 4.48,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0011",
+      "text": "a",
+      "start_time": 4.48,
+      "end_time": 4.68,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0012",
+      "text": "ještě",
+      "start_time": 4.68,
+      "end_time": 5.34,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0013",
+      "text": "tady",
+      "start_time": 5.34,
+      "end_time": 5.6,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0014",
+      "text": "je",
+      "start_time": 5.6,
+      "end_time": 6.12,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0015",
+      "text": "místo",
+      "start_time": 6.12,
+      "end_time": 6.46,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0016",
+      "text": "pro",
+      "start_time": 6.46,
+      "end_time": 6.64,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0017",
+      "text": "text.",
+      "start_time": 6.64,
+      "end_time": 6.92,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0018",
+      "text": "Tady",
+      "start_time": 7.14,
+      "end_time": 7.52,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0019",
+      "text": "dole",
+      "start_time": 7.52,
+      "end_time": 7.84,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0020",
+      "text": "a",
+      "start_time": 7.84,
+      "end_time": 8.14,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0021",
+      "text": "tady",
+      "start_time": 8.14,
+      "end_time": 8.42,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0022",
+      "text": "na",
+      "start_time": 8.42,
+      "end_time": 8.52,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0023",
+      "text": "kraji",
+      "start_time": 8.52,
+      "end_time": 8.84,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0024",
+      "text": "je",
+      "start_time": 8.84,
+      "end_time": 9.04,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0025",
+      "text": "no",
+      "start_time": 9.04,
+      "end_time": 9.28,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0026",
+      "text": "-go",
+      "start_time": 9.28,
+      "end_time": 9.42,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0027",
+      "text": "zone.",
+      "start_time": 9.42,
+      "end_time": 9.7,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0028",
+      "text": "Tam",
+      "start_time": 9.94,
+      "end_time": 10.14,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0029",
+      "text": "nic",
+      "start_time": 10.14,
+      "end_time": 10.44,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0030",
+      "text": "nedávej,",
+      "start_time": 10.44,
+      "end_time": 11.12,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0031",
+      "text": "to",
+      "start_time": 11.14,
+      "end_time": 11.24,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0032",
+      "text": "ti",
+      "start_time": 11.24,
+      "end_time": 11.36,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0033",
+      "text": "totiž",
+      "start_time": 11.36,
+      "end_time": 11.6,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0034",
+      "text": "Instagram",
+      "start_time": 11.6,
+      "end_time": 11.86,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0035",
+      "text": "nebude",
+      "start_time": 11.86,
+      "end_time": 12.4,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0036",
+      "text": "mít",
+      "start_time": 12.4,
+      "end_time": 12.58,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0037",
+      "text": "rád.",
+      "start_time": 12.58,
+      "end_time": 12.82,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0038",
+      "text": "Tam",
+      "start_time": 12.98,
+      "end_time": 13.46,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0039",
+      "text": "je",
+      "start_time": 13.46,
+      "end_time": 13.58,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0040",
+      "text": "prostor",
+      "start_time": 13.58,
+      "end_time": 13.94,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0041",
+      "text": "pro",
+      "start_time": 13.94,
+      "end_time": 14.06,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0042",
+      "text": "lajky,",
+      "start_time": 14.06,
+      "end_time": 14.34,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0043",
+      "text": "komentáře",
+      "start_time": 14.5,
+      "end_time": 15.18,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0044",
+      "text": "a",
+      "start_time": 15.18,
+      "end_time": 15.32,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0045",
+      "text": "tlačítka",
+      "start_time": 15.32,
+      "end_time": 15.82,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0046",
+      "text": "pro",
+      "start_time": 15.82,
+      "end_time": 15.96,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0047",
+      "text": "sdílení",
+      "start_time": 15.96,
+      "end_time": 16.52,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0048",
+      "text": "a",
+      "start_time": 16.52,
+      "end_time": 16.64,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0049",
+      "text": "pro",
+      "start_time": 16.64,
+      "end_time": 16.8,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0050",
+      "text": "uložení.",
+      "start_time": 16.8,
+      "end_time": 17.32,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0051",
+      "text": "Chceš",
+      "start_time": 17.4,
+      "end_time": 17.74,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0052",
+      "text": "zoomovat?",
+      "start_time": 17.74,
+      "end_time": 18.22,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0053",
+      "text": "OK.",
+      "start_time": 18.34,
+      "end_time": 18.86,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0054",
+      "text": "Ale",
+      "start_time": 19.88,
+      "end_time": 20.4,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0055",
+      "text": "oči",
+      "start_time": 20.4,
+      "end_time": 20.74,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0056",
+      "text": "měj",
+      "start_time": 20.74,
+      "end_time": 21.06,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0057",
+      "text": "stále",
+      "start_time": 21.06,
+      "end_time": 21.4,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0058",
+      "text": "ve",
+      "start_time": 21.4,
+      "end_time": 21.54,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0059",
+      "text": "stejné",
+      "start_time": 21.54,
+      "end_time": 21.96,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0060",
+      "text": "lince.",
+      "start_time": 21.96,
+      "end_time": 22.22,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0061",
+      "text": "Animace?",
+      "start_time": 23.06,
+      "end_time": 23.58,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0062",
+      "text": "Hlavně",
+      "start_time": 23.82,
+      "end_time": 24.34,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0063",
+      "text": "si",
+      "start_time": 24.34,
+      "end_time": 24.48,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0064",
+      "text": "ji",
+      "start_time": 24.48,
+      "end_time": 24.54,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0065",
+      "text": "nedávej",
+      "start_time": 24.54,
+      "end_time": 24.9,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0066",
+      "text": "přes",
+      "start_time": 24.9,
+      "end_time": 25.14,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0067",
+      "text": "obličej.",
+      "start_time": 25.14,
+      "end_time": 25.5,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0068",
+      "text": "To",
+      "start_time": 25.64,
+      "end_time": 25.88,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0069",
+      "text": "fakt",
+      "start_time": 25.88,
+      "end_time": 26.1,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0070",
+      "text": "ne.",
+      "start_time": 26.1,
+      "end_time": 26.3,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0071",
+      "text": "Grafika",
+      "start_time": 26.7,
+      "end_time": 27.22,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0072",
+      "text": "má",
+      "start_time": 27.22,
+      "end_time": 27.38,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0073",
+      "text": "fungovat",
+      "start_time": 27.38,
+      "end_time": 27.8,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0074",
+      "text": "jako",
+      "start_time": 27.8,
+      "end_time": 27.94,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0075",
+      "text": "ukazatel,",
+      "start_time": 27.94,
+      "end_time": 28.64,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0076",
+      "text": "ne",
+      "start_time": 28.64,
+      "end_time": 28.78,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0077",
+      "text": "dělat",
+      "start_time": 28.78,
+      "end_time": 29.1,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0078",
+      "text": "v",
+      "start_time": 29.1,
+      "end_time": 29.28,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0079",
+      "text": "záběru",
+      "start_time": 29.28,
+      "end_time": 29.64,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0080",
+      "text": "zbytečný",
+      "start_time": 29.64,
+      "end_time": 30.12,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0081",
+      "text": "chaos.",
+      "start_time": 30.12,
+      "end_time": 30.38,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0082",
+      "text": "Pomohlo",
+      "start_time": 30.82,
+      "end_time": 31.36,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0083",
+      "text": "ti",
+      "start_time": 31.36,
+      "end_time": 31.44,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0084",
+      "text": "tohle",
+      "start_time": 31.44,
+      "end_time": 31.72,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0085",
+      "text": "video?",
+      "start_time": 31.72,
+      "end_time": 31.96,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0086",
+      "text": "Tak",
+      "start_time": 32.16,
+      "end_time": 32.6,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0087",
+      "text": "si",
+      "start_time": 32.6,
+      "end_time": 32.7,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0088",
+      "text": "ho",
+      "start_time": 32.7,
+      "end_time": 32.8,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0089",
+      "text": "ulož",
+      "start_time": 32.8,
+      "end_time": 33.16,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0090",
+      "text": "a",
+      "start_time": 33.16,
+      "end_time": 33.44,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0091",
+      "text": "nezapomeň",
+      "start_time": 33.44,
+      "end_time": 34.12,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    },
+    {
+      "id": "word_0092",
+      "text": "následovat.",
+      "start_time": 34.12,
+      "end_time": 34.7,
+      "category": "Main",
+      "style": {
+        "font_family": "Inter",
+        "font_weight": "900",
+        "font_size": 90,
+        "color": {
+          "type": "gradient",
+          "colors": [
+            "#FFD700",
+            "#D4AF37",
+            "#AA771C"
+          ]
+        },
+        "stroke": {
+          "width": 6,
+          "color": "#000000"
+        },
+        "shadow": {
+          "color": "rgba(0, 0, 0, 0.9)",
+          "blur": 20,
+          "offset_x": 0,
+          "offset_y": 8
+        },
+        "glow": {
+          "intensity": 0.4,
+          "color": "#D4AF37"
+        }
+      },
+      "transform_3d": {
+        "position": {
+          "x": 540,
+          "y": 960,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "mesh_bend": {
+          "enabled": false
+        }
+      },
+      "layering": {
+        "z_index": "front"
+      }
+    }
+  ]
+}
