@@ -132,12 +132,14 @@ async def orchestrate_render(project_id, video_path, json_path, mask_path):
     
     print(f"Project {project_id} fully rendered: {output_final}")
 
-def process_mask(project_id: str, video_path: str, output_base_path: str):
+def process_mask(project_id: str, video_path: str, output_base_path: str, person_index: int = 0, point_prompts: list = None):
     from mask_generator import generate_mask
     try:
         generate_mask(
             video_path=video_path,
-            output_base_path=output_base_path
+            output_base_path=output_base_path,
+            person_index=person_index,
+            point_prompts=point_prompts
         )
         with open(f"{output_base_path}.done", "w") as f:
             f.write("done")
@@ -147,9 +149,10 @@ def process_mask(project_id: str, video_path: str, output_base_path: str):
             f.write(str(e))
 
 @app.post("/api/v1/generate-mask")
-async def generate_mask(background_tasks: BackgroundTasks, file: UploadFile = File(...)):
+async def generate_mask_endpoint(background_tasks: BackgroundTasks, file: UploadFile = File(...)):
     """
-    Triggers Torchvision MobileNetV3 segmentation to generate a person mask video asynchronously.
+    Triggers person segmentation. SAM2 (fine quality) with DeepLabV3 fallback.
+    Future params (via form fields): person_index, click_x, click_y
     """
     project_id = str(uuid.uuid4())
     video_path = os.path.join(UPLOAD_DIR, f"{project_id}_maskinput_{file.filename}")
@@ -190,3 +193,4 @@ async def get_mask_status(project_id: str):
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+
